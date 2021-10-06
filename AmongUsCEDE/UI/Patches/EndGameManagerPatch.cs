@@ -19,24 +19,24 @@ internal class EndGameManagerPatch
 		{
 			switch (CETempData.VictoryType)
 			{
-			case VictoryTypes.Stalemate:
-				__instance.WinText.text = "Stalemate";
-				__instance.BackgroundBar.material.SetColor("_Color", Palette.Orange);
-				__instance.WinText.color = Palette.Orange;
-				SoundManager.Instance.PlayDynamicSound("Stinger", __instance.DisconnectStinger, loop: false, (Action<AudioSource, float>)__instance.GetStingerVol);
-				break;
-			case VictoryTypes.Tie:
-				__instance.WinText.text = "Tie";
-				__instance.BackgroundBar.material.SetColor("_Color", Palette.Orange);
-				__instance.WinText.color = Palette.Orange;
-				SoundManager.Instance.PlayDynamicSound("Stinger", __instance.DisconnectStinger, loop: false, (Action<AudioSource, float>)__instance.GetStingerVol);
-				break;
-			case VictoryTypes.Error:
-				__instance.WinText.text = "Error";
-				__instance.BackgroundBar.material.SetColor("_Color", Palette.White);
-				__instance.WinText.color = Palette.DisabledGrey;
-				SoundManager.Instance.PlayDynamicSound("Stinger", __instance.DisconnectStinger, loop: false, (Action<AudioSource, float>)__instance.GetStingerVol);
-				break;
+				case VictoryTypes.Stalemate:
+					__instance.WinText.text = "Stalemate";
+					__instance.BackgroundBar.material.SetColor("_Color", Palette.Orange);
+					__instance.WinText.color = Palette.Orange;
+					SoundManager.Instance.PlayDynamicSound("Stinger", __instance.DisconnectStinger, loop: false, (Action<AudioSource, float>)__instance.GetStingerVol);
+					break;
+				case VictoryTypes.Tie:
+					__instance.WinText.text = "Tie";
+					__instance.BackgroundBar.material.SetColor("_Color", Palette.Orange);
+					__instance.WinText.color = Palette.Orange;
+					SoundManager.Instance.PlayDynamicSound("Stinger", __instance.DisconnectStinger, loop: false, (Action<AudioSource, float>)__instance.GetStingerVol);
+					break;
+				case VictoryTypes.Error:
+					__instance.WinText.text = "Error";
+					__instance.BackgroundBar.material.SetColor("_Color", Palette.White);
+					__instance.WinText.color = Palette.DisabledGrey;
+					SoundManager.Instance.PlayDynamicSound("Stinger", __instance.DisconnectStinger, loop: false, (Action<AudioSource, float>)__instance.GetStingerVol);
+					break;
 			}
 			return false;
 		}

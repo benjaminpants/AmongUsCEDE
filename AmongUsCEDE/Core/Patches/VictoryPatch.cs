@@ -13,6 +13,7 @@ class VictoryPatch
 			return false;
 		}
 		bool IsSabotageEnd = false;
+		//there used to be a lot of copied stuff here but due to my incompetence its no longer here
 		ScriptManager.RunCurrentGMFunction("CheckEndCriteria", false, GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks, IsSabotageEnd);
 		return false;
 	}
