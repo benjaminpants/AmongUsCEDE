@@ -102,15 +102,16 @@ namespace AmongUsCEDE.Mods
 			string text = "\n" + File.ReadAllText(path);
 			Script script = new Script(CoreModules.Preset_HardSandbox & CoreModules.OS_Time); //this makes it way more secure then before. adding OS_TIME cus i dont see any reason why not and someone may want it
 			script.DoString(InitCodes.InitialLua); //defines enums
-			AddData(new CodeScript(script), ScriptType.Gamemode, ScriptLanguage.Lua, true);
+			CodeScript cscript = new CodeScript(ScriptLanguage.Lua);
+			cscript.Script = script;
+			AddData(cscript, ScriptType.Gamemode, ScriptLanguage.Lua, true);
 			script.DoString(text);
 			DynValue vals = script.Call(script.Globals["InitializeGamemode"]);
 			if (vals.Type != DataType.Table) return false;
 			Gamemode GM = new Gamemode(vals.Table.Get(2).String, vals.Table.Get(1).String);
-			GM.Script = new CodeScript(ScriptLanguage.Lua);
+			GM.Script = cscript;
 			GM.Roles = TempRoles;
 			TempRoles = new List<Role>();
-			GM.Script.Script = script;
 			GM.Script.FileLocation = path;
 			ModToAddTo.Gamemodes.Add(GM);
 
