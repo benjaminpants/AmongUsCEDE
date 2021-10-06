@@ -29,6 +29,13 @@ function InitializeGamemode()
 		color = {r=255,g=25,b=25},
 		name_color = {r=255,g=25,b=25}
 	})
+	
+	
+	CE_AddHook("OnEject", function(player)
+		--this is just an example, probably will actually have a proper hook
+	end)
+	
+	
 	return {"Base","base"} --Display Name then Internal Name
 end
 

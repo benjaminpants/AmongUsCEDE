@@ -25,7 +25,7 @@ internal class ImpostorSelectPatch
 			select pcd into pc
 			where !pc.IsDead
 			select pc).ToList();
-		DynValue dyn = ScriptManager.RunCurrentGMFunction("SelectRoles", IgnorePlugins: false, new object[1]
+		DynValue dyn = ScriptManager.RunCurrentGMFunction("SelectRoles", false, new object[1]
 		{
 			list.ToArray()
 		});

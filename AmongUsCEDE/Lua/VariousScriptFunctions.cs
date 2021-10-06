@@ -23,6 +23,8 @@ using MoonSharp.Interpreter;
 
 namespace AmongUsCEDE.Mods
 {
+
+
 	public static class VariousScriptFunctions
 	{
 		private static DynValue TryGet(this Table tab, string key, DynValue defaul, bool forcesametype = true)
@@ -38,6 +40,12 @@ namespace AmongUsCEDE.Mods
 				DebugLog.ShowMessage("key:" + key + "\nval is null:" + (val == null) + "\ntype:" + val.Type + "\n" + defaul.Type);
 				return defaul;
 			}
+		}
+
+
+		public static void AddHookLua(string hook, Closure function)
+		{
+			ModLoader.TempHooks.Add(hook,new CodeHook(ScriptLanguage.Lua,function));
 		}
 
 		public static void AddRole(Table parms)

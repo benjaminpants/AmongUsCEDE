@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Bugfixes\NoAchievementsManager.cs~RF3b33c1d7.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\Dependencies\0Harmony.dll</HintPath>
     </Reference>

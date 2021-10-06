@@ -97,19 +97,56 @@ namespace AmongUsCEDE
 			}
 		}
 
+
+
 		public static bool RanSucessfully(this LuaComplete me)
 		{
 			return me == LuaComplete.Success || me == LuaComplete.Missing || me == LuaComplete.Error;
 		}
 
-		public static DynValue RunCurrentGMFunction(string function, bool IgnorePlugins, params object[] parm)
+		public static DynValue CallCurrentGMHooks(string hook, params object[] parm)
+		{
+			DynValue val = DynValue.Nil;
+
+			if (CurrentGamemode.Hooks.TryGetValue(hook, out CodeHook curhook))
+			{
+				try
+				{
+					switch (curhook.Language)
+					{
+						case ScriptLanguage.Lua:
+							val = (curhook.HookObject as Closure).Call(parm);
+							break;
+					}
+				}
+				catch (Exception E)
+				{
+					DebugLog.ShowMessage("Caught Hook Error(" + hook + "):" + E.Message);
+					return null;
+				}
+			}
+
+
+			if (val.Type == DataType.Nil)
+			{
+				return null;
+			}
+
+			return val;
+		}
+
+
+		public static DynValue RunCurrentGMFunction(string function, bool DisallowOverride, params object[] parm)
 		{
 			CodeScript cs = CurrentGamemode.Script;
-			switch(cs.Language)
+			DynValue hookdyn = CallCurrentGMHooks(function, parm);
+			DynValue dyn = DynValue.Nil;
+
+
+			switch (cs.Language)
 			{
 				case ScriptLanguage.Lua:
 					Script scr = cs.Script as Script;
-					DynValue dyn = null;
 					try
 					{
 						dyn = scr.Call(scr.Globals[function], parm);
@@ -119,10 +156,22 @@ namespace AmongUsCEDE
 						DebugLog.ShowMessage("Caught Lua Error(" + function + "):" + E.Message);
 						return null;
 					}
-					return dyn;
+					break;
 				default:
 					throw new Exception("Unimplemented ScriptType:" + cs.Language.ToString());
 			}
+
+			if (hookdyn != null && !DisallowOverride)
+			{
+				return hookdyn;
+			}
+
+			if (dyn.Type == DataType.Nil)
+			{
+				return null;
+			}
+
+			return dyn;
 		}
 	}
 }

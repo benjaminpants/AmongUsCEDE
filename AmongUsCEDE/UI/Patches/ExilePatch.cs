@@ -1,29 +1,50 @@
 // AmongUsCEDE.UI.Patches.ExilePatch
 using AmongUsCEDE.Core;
 using AmongUsCEDE.Core.Extensions;
-using AmongUsCEDE.Extensions;
+using AmongUsCEDE.LuaData;
 using HarmonyLib;
 
-[HarmonyPatch(typeof(ExileController))]
-[HarmonyPatch("Begin")]
-internal class ExilePatch
+
+namespace AmongUsCEDE
 {
-	private static void Postfix(ExileController __instance, GameData.PlayerInfo exiled)
+
+	[HarmonyPatch(typeof(ExileController))]
+	[HarmonyPatch("Begin")]
+	class ExilePatch
 	{
-		if (!PlayerControl.GameOptions.ConfirmImpostor)
+		private static void Postfix(ExileController __instance, GameData.PlayerInfo exiled)
 		{
-			__instance.ImpostorText.text = "";
-		}
-		else if (exiled != null)
-		{
-			Role role = exiled.GetRole();
-			string join = "the";
-			if (GameFunctions.FindAmountWithRole(role.UUID) > 1)
+			if (!PlayerControl.GameOptions.ConfirmImpostor)
 			{
-				join = exiled.PlayerName.AOrAn(false);
+				__instance.ImpostorText.text = "";
 			}
-			__instance.completeString = exiled.PlayerName + " was " + join + " " + role.RoleName;
-			__instance.ImpostorText.text = "";
+			else if (exiled != null)
+			{
+				Role role = exiled.GetRole();
+				string join = "the";
+				if (GameFunctions.FindAmountWithRole(role.UUID) > 1)
+				{
+					join = exiled.PlayerName.AOrAn(false);
+				}
+				__instance.completeString = exiled.PlayerName + " was " + join + " " + role.RoleName;
+				__instance.ImpostorText.text = "";
+			}
 		}
 	}
+
+	[HarmonyPatch(typeof(ExileController))]
+	[HarmonyPatch("WrapUp")]
+	class ExileFinalizePatch
+	{
+		static void Postfix(ExileController __instance)
+		{
+			PlayerInfoLua luafo = null;
+			if (__instance.exiled != null)
+			{
+				luafo = (PlayerInfoLua)__instance.exiled;
+			}
+			ScriptManager.CallCurrentGMHooks("OnEject",luafo);
+		}
+	}
+
 }

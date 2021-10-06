@@ -96,12 +96,14 @@ namespace AmongUsCEDE.Mods
 		}
 
 		public static List<Role> TempRoles = new List<Role>();
-	
+
+		public static Dictionary<string, CodeHook> TempHooks = new Dictionary<string, CodeHook>();
+
 		public static bool LoadGamemode(string path, ref Mod ModToAddTo)
 		{
 			string text = "\n" + File.ReadAllText(path);
 			Script script = new Script(CoreModules.Preset_HardSandbox & CoreModules.OS_Time); //this makes it way more secure then before. adding OS_TIME cus i dont see any reason why not and someone may want it
-			script.DoString(InitCodes.InitialLua); //defines enums
+			script.DoString(InitCodes.InitialLua); //this doesn't even work
 			CodeScript cscript = new CodeScript(ScriptLanguage.Lua);
 			cscript.Script = script;
 			AddData(cscript, ScriptType.Gamemode, ScriptLanguage.Lua, true);
@@ -111,7 +113,9 @@ namespace AmongUsCEDE.Mods
 			Gamemode GM = new Gamemode(vals.Table.Get(2).String, vals.Table.Get(1).String);
 			GM.Script = cscript;
 			GM.Roles = TempRoles;
+			GM.Hooks = TempHooks;
 			TempRoles = new List<Role>();
+			TempHooks = new Dictionary<string, CodeHook>();
 			GM.Script.FileLocation = path;
 			ModToAddTo.Gamemodes.Add(GM);
 
@@ -139,10 +143,12 @@ namespace AmongUsCEDE.Mods
 					if (includeinit)
 					{
 						script.Globals["CE_AddRole"] = (Action<Table>)VariousScriptFunctions.AddRole;
+						script.Globals["CE_AddHook"] = (Action<string,Closure>)VariousScriptFunctions.AddHookLua;
 					}
 					else
 					{
 						script.Globals["CE_AddRole"] = null;
+						script.Globals["CE_AddHook"] = null;
 					}
 					break;
 			}

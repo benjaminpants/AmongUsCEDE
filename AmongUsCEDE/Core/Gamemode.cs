@@ -11,6 +11,7 @@ namespace AmongUsCEDE.Core
 		public string DisplayName;
 		public List<Role> Roles = new List<Role>();
 		public CodeScript Script;
+		public Dictionary<string, CodeHook> Hooks = new Dictionary<string, CodeHook>();
 
 		public Gamemode()
 		{
@@ -32,6 +33,19 @@ namespace AmongUsCEDE.Core
 		Javascript,
 		Undefined
 	}
+
+	public class CodeHook
+	{
+		public ScriptLanguage Language;
+		public object HookObject;
+
+		public CodeHook(ScriptLanguage lang, object hook)
+		{
+			Language = lang;
+			HookObject = hook;
+		}
+	}
+
 
 	public class CodeScript
 	{
