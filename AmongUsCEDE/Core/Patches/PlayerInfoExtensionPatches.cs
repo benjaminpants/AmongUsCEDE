@@ -82,6 +82,18 @@ namespace AmongUsCEDE.Core.Patches
 	
 	}
 
+
+	[HarmonyPatch(typeof(AmongUsClient))]
+	[HarmonyPatch("ExitGame")]
+	class ExitGamePatch
+	{
+		static void Prefix()
+		{
+			PlayerInfoExtensions.FlushAllExtensions();
+		}
+	}
+
+
 	internal class PlayerInfoSerializeAndDeserializePatches
 	{
 		[HarmonyPatch(typeof(GameData.PlayerInfo))]
