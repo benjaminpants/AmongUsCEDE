@@ -35,6 +35,8 @@ function InitializeGamemode()
 		--AAAAAAA
 	end)
 	
+	CE_AddIntSetting("sus_setting","Sus Level"," sus points", 50, 10, 0, 100)
+	
 	
 	return {"Base","base"} --Display Name then Internal Name
 end

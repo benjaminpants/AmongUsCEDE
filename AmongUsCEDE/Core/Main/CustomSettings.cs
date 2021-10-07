@@ -18,48 +18,20 @@ namespace AmongUsCEDE.Core.CustomSettings
 	public class Setting
 	{
 		public string internal_name = "internal_setting_name";
-		private string display_name = "SUS SETTING";
-		private string addend = "";
-		private float Increment = 1f;
+		public string display_name = "SUS SETTING";
+		public string addend = "";
+		public float Increment = 1f;
 
 		public object Value;
 
 		public object Default;
 
-		private object Min;
+		public object Min;
 
-		private object Max;
+		public object Max;
 
 		public SettingType settingtype = SettingType.Invalid;
 
-		public void ChangeValue(bool Positive)
-		{
-			int mult = (Positive ? 1 : -1);
-
-			switch (settingtype)
-			{
-				case SettingType.Toggle:
-					Value = Positive;
-					return;
-				case SettingType.Int:
-					Value = (int)Value - ((int)Increment * mult);
-					break;
-				case SettingType.Float:
-					Value = (float)Value - (Increment * mult);
-					break;
-				default:
-					throw new NotImplementedException(settingtype + " is not implemented!");
-			}
-
-			if ((float)Value < (float)Min)
-			{
-				Value = Min;
-			}
-			else if ((float)Value > (float)Max)
-			{
-				Value = Max;
-			}
-		}
 
 		public void Serialize(BinaryWriter writer) //im going to buy fortnite season 6 battle pass
 		{

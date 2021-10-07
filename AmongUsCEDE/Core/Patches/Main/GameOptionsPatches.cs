@@ -103,51 +103,80 @@ namespace AmongUsCEDE.Core
 		}
 
 
-		/*[HarmonyPatch(typeof(GameOptionsData))]
-		[HarmonyPatch("Deserialize", new Type[] { typeof(BinaryReader) })]
-		class DeserializeStoragePatch
+
+		[HarmonyPatch(typeof(GameOptionsData))]
+		[HarmonyPatch("FromBytes")]
+		class FromBytesPatch
 		{
-			static void Postfix(ref BinaryReader reader, ref GameOptionsData __result)
+			static bool Prefix(UnhollowerBaseLib.Il2CppStructArray<byte> bytes, out int __state)
 			{
-				if (__result == null)
+				GameOptionsData result;
+				using (MemoryStream memoryStream = new MemoryStream(bytes))
 				{
-					GameOptionsExtension.ReturnToDefault();
-				}
-				GameOptionsExtension.Gamemode = reader.ReadInt32();
-				for (int i = 0; i < ScriptManager.CurrentGamemode.Settings.Count; i++)
-				{
-					switch (ScriptManager.CurrentGamemode.Settings[i].settingtype)
+					using (BinaryReader binaryReader = new BinaryReader(memoryStream))
 					{
-						case SettingType.Int:
-							ScriptManager.CurrentGamemode.Settings[i].Value = reader.ReadInt32();
-							break;
-						case SettingType.Float:
-							ScriptManager.CurrentGamemode.Settings[i].Value = reader.ReadSingle();
-							break;
-						case SettingType.Toggle:
-							ScriptManager.CurrentGamemode.Settings[i].Value = reader.ReadBoolean();
-							break;
-						default:
-							throw new NotImplementedException(ScriptManager.CurrentGamemode.Settings[i].settingtype + " not implemented! (GameOptionsData Deserialize)");
+						result = (GameOptionsData.Deserialize(new System.IO.BinaryReader(memoryStream)) ?? new GameOptionsData());
 					}
-
 				}
-				return;
-
+				__state = 0;
+				return false;
 			}
-		}*/
+			static void Postfix(UnhollowerBaseLib.Il2CppStructArray<byte> bytes)
+			{
+				using (MemoryStream memoryStream = new MemoryStream(bytes))
+				{
+					using (BinaryReader reader = new BinaryReader(memoryStream))
+					{
+						GameOptionsExtension.Gamemode = reader.ReadInt32();
+						for (int i = 0; i < ScriptManager.CurrentGamemode.Settings.Count; i++)
+						{
+							switch (ScriptManager.CurrentGamemode.Settings[i].settingtype)
+							{
+								case SettingType.Int:
+									ScriptManager.CurrentGamemode.Settings[i].Value = reader.ReadInt32();
+									break;
+								case SettingType.Float:
+									ScriptManager.CurrentGamemode.Settings[i].Value = reader.ReadSingle();
+									break;
+								case SettingType.Toggle:
+									ScriptManager.CurrentGamemode.Settings[i].Value = reader.ReadBoolean();
+									break;
+								default:
+									throw new NotImplementedException(ScriptManager.CurrentGamemode.Settings[i].settingtype + " not implemented! (GameOptionsData Deserialize)");
+							}
 
+						}
+					}
+				}
+			}
+		}
 
 	}
 
 
-	[HarmonyPatch(typeof(SaveManager))]
-	[HarmonyPatch("SaveGameOptions")]
+	//[HarmonyPatch(typeof(SaveManager))]
+	//[HarmonyPatch("SaveGameOptions")]
 	class SaveGameOptionsPatch
 	{
-		static void Prefix(ref string filename)
+		static bool Prefix(GameOptionsData data, ref string filename, bool saveNow)
 		{
+			if (filename.StartsWith(AmongUsCEDE.CustomDataPrefix)) return true;
 			filename = AmongUsCEDE.CustomDataPrefix + filename;
+			SaveManager.SaveGameOptions(data,filename,saveNow);
+			return false;
+		}
+	}
+
+	//[HarmonyPatch(typeof(SaveManager))]
+	//[HarmonyPatch("LoadGameOptions")]
+	class LoadGameOptionsPatch
+	{
+		static bool Prefix(ref string filename)
+		{
+			if (filename.StartsWith(AmongUsCEDE.CustomDataPrefix)) return true;
+			filename = AmongUsCEDE.CustomDataPrefix + filename;
+			SaveManager.LoadGameOptions(filename);
+			return false;
 		}
 	}
 

@@ -93,6 +93,11 @@ namespace AmongUsCEDE
 		{
 			get
 			{
+				if (GameOptionsExtension.Gamemode >= ModLoader.Mods[0].Gamemodes.Count)
+				{
+					DebugLog.ShowMessage("gamemode out of range! " + GameOptionsExtension.Gamemode);
+					return ModLoader.Mods[0].Gamemodes[0];
+				}
 				return ModLoader.Mods[0].Gamemodes[GameOptionsExtension.Gamemode];
 			}
 		}
