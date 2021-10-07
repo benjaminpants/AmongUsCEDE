@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MoonSharp.Interpreter;
+using AmongUsCEDE.Core.CustomSettings;
 
 namespace AmongUsCEDE.Core
 {
@@ -10,6 +11,7 @@ namespace AmongUsCEDE.Core
 		public string Name;
 		public string DisplayName;
 		public List<Role> Roles = new List<Role>();
+		public List<Setting> Settings = new List<Setting>();
 		public CodeScript Script;
 		public Dictionary<string, CodeHook> Hooks = new Dictionary<string, CodeHook>();
 

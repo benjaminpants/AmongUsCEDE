@@ -18,6 +18,8 @@ namespace AmongUsCEDE
 		public Harmony Harmony { get; } = new Harmony("mtm101.rulerp.moogus.amongusce");
 		
 		public const int Lua_UserDataAmount = 4; //how many "UserData" variables are available to use. Beware increasing this increases packet size!
+
+		public const string CustomDataPrefix = "cede_";
 		public override void Load()
 		{
 			ConsensusPatcher.Patch(Harmony);

@@ -32,7 +32,7 @@ function InitializeGamemode()
 	
 	
 	CE_AddHook("OnEject", function(player)
-		--this is just an example, probably will actually have a proper hook
+		--AAAAAAA
 	end)
 	
 	

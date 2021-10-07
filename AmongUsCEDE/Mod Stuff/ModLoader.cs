@@ -12,6 +12,7 @@ using AmongUsCEDE.Core;
 using AmongUsCEDE.Lua;
 using AmongUsCEDE.LuaData;
 using MoonSharp.Interpreter;
+using AmongUsCEDE.Core.CustomSettings;
 
 namespace AmongUsCEDE.Mods
 {
@@ -72,11 +73,11 @@ namespace AmongUsCEDE.Mods
 						CURM.Enabled = false;
 						continue;
 					}
-					if (Directory.Exists(Path.Combine(DS, "Lua")))
+					if (Directory.Exists(Path.Combine(DS, "Scripts")))
 					{
-						if (Directory.Exists(Path.Combine(DS, "Lua", "Gamemodes")))
+						if (Directory.Exists(Path.Combine(DS, "Scripts", "Gamemodes")))
 						{
-							string luapath = Path.Combine(DS, "Lua", "Gamemodes");
+							string luapath = Path.Combine(DS, "Scripts", "Gamemodes");
 
 							foreach (string luafile in Directory.GetFiles(luapath, "*.lua"))
 							{
@@ -99,6 +100,8 @@ namespace AmongUsCEDE.Mods
 
 		public static Dictionary<string, CodeHook> TempHooks = new Dictionary<string, CodeHook>();
 
+		public static List<Setting> TempSettings = new List<Setting>(); //incase anyone asks, this is just to make sure settings always land up in the same place
+
 		public static bool LoadGamemode(string path, ref Mod ModToAddTo)
 		{
 			string text = "\n" + File.ReadAllText(path);
@@ -114,8 +117,10 @@ namespace AmongUsCEDE.Mods
 			GM.Script = cscript;
 			GM.Roles = TempRoles;
 			GM.Hooks = TempHooks;
+			GM.Settings = TempSettings;
 			TempRoles = new List<Role>();
 			TempHooks = new Dictionary<string, CodeHook>();
+			TempSettings = new List<Setting>();
 			GM.Script.FileLocation = path;
 			ModToAddTo.Gamemodes.Add(GM);
 
@@ -127,7 +132,7 @@ namespace AmongUsCEDE.Mods
 			DebugLog.ShowMessage("Lua:" + text);
 		}
 
-		private static void AddData(CodeScript scr, ScriptType type, ScriptLanguage lang, bool includeinit) //TODO: make this not stupid lol
+		private static void AddData(CodeScript scr, ScriptType type, ScriptLanguage lang, bool includeinit) //made this not stupid :sunglasses:
 		{
 			switch (lang)
 			{
@@ -143,12 +148,16 @@ namespace AmongUsCEDE.Mods
 					if (includeinit)
 					{
 						script.Globals["CE_AddRole"] = (Action<Table>)VariousScriptFunctions.AddRole;
+						script.Globals["CE_AddIntSetting"] = (Action<string, string, string, int, int, int, int>)VariousScriptFunctions.AddIntSetting;
+						script.Globals["CE_AddFloatSetting"] = (Action<string, string, string, float, float, float, float>)VariousScriptFunctions.AddFloatSetting;
 						script.Globals["CE_AddHook"] = (Action<string,Closure>)VariousScriptFunctions.AddHookLua;
 					}
 					else
 					{
 						script.Globals["CE_AddRole"] = null;
 						script.Globals["CE_AddHook"] = null;
+						script.Globals["CE_AddIntSetting"] = null;
+						script.Globals["CE_AddFloatSetting"] = null;
 					}
 					break;
 			}

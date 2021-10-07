@@ -93,7 +93,7 @@ namespace AmongUsCEDE
 		{
 			get
 			{
-				return ModLoader.Mods[0].Gamemodes[0];
+				return ModLoader.Mods[0].Gamemodes[GameOptionsExtension.Gamemode];
 			}
 		}
 
@@ -142,6 +142,11 @@ namespace AmongUsCEDE
 			DynValue hookdyn = CallCurrentGMHooks(function, parm);
 			DynValue dyn = DynValue.Nil;
 
+			if (hookdyn != null && !DisallowOverride)
+			{
+				return hookdyn;
+			}
+
 
 			switch (cs.Language)
 			{
@@ -161,10 +166,6 @@ namespace AmongUsCEDE
 					throw new Exception("Unimplemented ScriptType:" + cs.Language.ToString());
 			}
 
-			if (hookdyn != null && !DisallowOverride)
-			{
-				return hookdyn;
-			}
 
 			if (dyn.Type == DataType.Nil)
 			{

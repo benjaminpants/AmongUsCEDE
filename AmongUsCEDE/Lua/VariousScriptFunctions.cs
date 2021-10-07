@@ -20,6 +20,7 @@ using AmongUsCEDE.Core;
 using AmongUsCEDE.Core.Extensions;
 using AmongUsCEDE.LuaData;
 using MoonSharp.Interpreter;
+using AmongUsCEDE.Core.CustomSettings;
 
 namespace AmongUsCEDE.Mods
 {
@@ -40,6 +41,17 @@ namespace AmongUsCEDE.Mods
 				DebugLog.ShowMessage("key:" + key + "\nval is null:" + (val == null) + "\ntype:" + val.Type + "\n" + defaul.Type);
 				return defaul;
 			}
+		}
+
+
+		public static void AddIntSetting(string intern_name, string display_name, string suffix, int def, int increment, int min, int max)
+		{
+			ModLoader.TempSettings.Add(new Setting(intern_name, display_name, suffix, SettingType.Int, def, increment, min, max));
+		}
+
+		public static void AddFloatSetting(string intern_name, string display_name, string suffix, float def, float increment, float min, float max)
+		{
+			ModLoader.TempSettings.Add(new Setting(intern_name, display_name, suffix, SettingType.Float, def, increment, min, max));
 		}
 
 
