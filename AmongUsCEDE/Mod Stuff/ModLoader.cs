@@ -145,6 +145,8 @@ namespace AmongUsCEDE.Mods
 					script.Globals["CE_GetAllPlayers"] = (Func<bool, List<PlayerInfoLua>>)VariousScriptFunctions.GetAllPlayers;
 					script.Globals["CE_GetAllPlayersOnLayer"] = (Func<byte, bool, List<PlayerInfoLua>>)VariousScriptFunctions.GetAllOnLayer;
 					script.Globals["CE_GetAllPlayersOnTeam"] = (Func<byte, bool, List<PlayerInfoLua>>)VariousScriptFunctions.GetAllOnTeam;
+					script.Globals["CE_GetNumberSetting"] = (Func<string, float>)VariousScriptFunctions.GetNumberSetting;
+					script.Globals["CE_GetInternalNumberSetting"] = (Func<string, float>)VariousScriptFunctions.GetInternalNumberSetting;
 					if (includeinit)
 					{
 						script.Globals["CE_AddRole"] = (Action<Table>)VariousScriptFunctions.AddRole;

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
+using Hazel;
 
 namespace AmongUsCEDE.Core.CustomSettings
 {
@@ -33,7 +34,7 @@ namespace AmongUsCEDE.Core.CustomSettings
 		public SettingType settingtype = SettingType.Invalid;
 
 
-		public void Serialize(BinaryWriter writer) //im going to buy fortnite season 6 battle pass
+		public void Serialize(ref MessageWriter writer) //im going to buy fortnite season 6 battle pass
 		{
 			//writer.Write((byte)settingtype);
 			//dont

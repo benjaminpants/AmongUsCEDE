@@ -42,7 +42,7 @@ namespace AmongUsCEDE.Core.Patches
 	[HarmonyPatch("CheckTaskCompletion")]
 	class CheckTaskCompletionPatch
 	{
-		static bool Prefix(ShipStatus __instance, bool __result) //if (GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
+		static bool Prefix(ShipStatus __instance, ref bool __result) //if (GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
 		{
 			GameData.Instance.RecomputeTaskCounts();
 			__result = false;

@@ -22,6 +22,10 @@ namespace AmongUsCEDE.RPCs
 		{
 			switch (callId)
 			{
+				case 2:
+					PlayerControl.GameOptions = GameOptionsData.FromBytes(reader.ReadBytesAndSize());
+					GameOptionsExtension.Deserialize(reader);
+					return false;
 				case 3: //overwrite set impostors cuz impostors no exist anymore
 					GameFunctions.SetRoles(__instance, reader.ReadBytesAndSize(), reader.ReadBytesAndSize(), true); //reads the two arrays for players and roles
 					return false;

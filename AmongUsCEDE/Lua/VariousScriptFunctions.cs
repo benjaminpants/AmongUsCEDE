@@ -54,6 +54,42 @@ namespace AmongUsCEDE.Mods
 			ModLoader.TempSettings.Add(new Setting(intern_name, display_name, suffix, SettingType.Float, def, increment, min, max));
 		}
 
+		public static float GetInternalNumberSetting(string setting_name)
+		{
+			switch (setting_name)
+			{
+				case "impostor_count":
+					return PlayerControl.GameOptions.NumImpostors;
+				case "crewmate_vision":
+					return PlayerControl.GameOptions.CrewLightMod;
+				case "impostor_vision":
+					return PlayerControl.GameOptions.ImpostorLightMod;
+				case "max_players":
+					return PlayerControl.GameOptions.MaxPlayers;
+				default:
+					break;
+			}
+			return -1f;
+		}
+
+
+		public static float GetNumberSetting(string internal_name)
+		{
+			Setting setting = ScriptManager.CurrentGamemode.Settings.Find(s => s.display_name == internal_name);
+			if (setting.settingtype == SettingType.Float || setting.settingtype == SettingType.Int)
+			{
+				if (setting.settingtype == SettingType.Float) //TODO: figure out if this is necessary
+				{
+					return (float)setting.Value;
+				}
+				else
+				{
+					return (int)setting.Value;
+				}
+			}
+			return -1f;
+		}
+
 
 		public static void AddHookLua(string hook, Closure function)
 		{
@@ -63,19 +99,18 @@ namespace AmongUsCEDE.Mods
 		public static void AddRole(Table parms)
 		{
 			Role role = new Role(parms.Get("internal_name").String, parms.Get("name").String);
-			role.RoleText = parms.Get("role_text").String;
+			role.Reveal_Text = parms.Get("role_text").String;
 			Table specialtable = parms.Get("specials").Table;
 			for (int i = 1; i < specialtable.Length + 1; i++)
 			{
 				role.AvailableSpecials.Add((RoleSpecials)specialtable.Get(i).Number);
 			}
 			role.FakeTaskString = parms.TryGet("task_text", DynValue.NewString("Define task_text please lol")).String;
-			role.RoleVisibility = (RoleVisibility)parms.TryGet("role_vis", DynValue.NewNumber(0)).Number;
+			role.Visibility = (RoleVisibility)parms.TryGet("role_vis", DynValue.NewNumber(0)).Number;
 			role.HasTasks = parms.TryGet("has_tasks", DynValue.True).Boolean;
 			DebugLog.ShowMessage(role.HasTasks.ToString());
 			role.Layer = (byte)parms.TryGet("layer", DynValue.NewNumber(255)).Number;
-			role.RoleTeam = (byte)parms.TryGet("team", DynValue.NewNumber(0)).Number;
-			role.UseImpVision = parms.TryGet("imp_vision", DynValue.True).Boolean;
+			role.Team = (byte)parms.TryGet("team", DynValue.NewNumber(0)).Number;
 			DynValue colorval = parms.TryGet("color", DynValue.NewNil(), false);
 			Color color = Palette.ClearWhite;
 			if (colorval.Type == DataType.Table)
@@ -174,7 +209,7 @@ namespace AmongUsCEDE.Mods
 			foreach (GameData.PlayerInfo fo in GameData.Instance.AllPlayers)
 			{
 				if (MustBeAlive && fo.IsDead) continue;
-				if (fo.GetRole().RoleTeam == Team)
+				if (fo.GetRole().Team == Team)
 				{
 					folist.Add((PlayerInfoLua)fo);
 				}

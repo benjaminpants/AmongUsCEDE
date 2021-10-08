@@ -17,8 +17,8 @@ namespace AmongUsCEDE.UI.Patches
 		static void Prefix(GameOptionsMenu __instance)
 		{
 			//DebugLog.ShowMessage("I AM RUNNING" + __instance.transform.FindChild("CrewmateVision").gameObject);
-			GameObject.Destroy(__instance.transform.FindChild("CrewmateVision").gameObject);
-			GameObject.Destroy(__instance.transform.FindChild("ImpostorVision").gameObject);
+			//GameObject.Destroy(__instance.transform.FindChild("CrewmateVision").gameObject);
+			//GameObject.Destroy(__instance.transform.FindChild("ImpostorVision").gameObject);
 
 			
 

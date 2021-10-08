@@ -22,11 +22,11 @@ namespace AmongUsCEDE
 			{
 				Role role = exiled.GetRole();
 				string join = "the";
-				if (GameFunctions.FindAmountWithRole(role.UUID) > 1)
+				if (GameFunctions.FindAmountWithRole(role.Internal_Name) > 1)
 				{
 					join = exiled.PlayerName.AOrAn(false);
 				}
-				__instance.completeString = exiled.PlayerName + " was " + join + " " + role.RoleName;
+				__instance.completeString = exiled.PlayerName + " was " + join + " " + role.Name;
 				__instance.ImpostorText.text = "";
 			}
 		}

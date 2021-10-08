@@ -29,7 +29,7 @@ namespace AmongUsCEDE.Core
 			byte[] rolesbytes = new byte[roles.Length];
 			for (int i = 0; i < roles.Length; i++)
 			{
-				Role role = ScriptManager.CurrentGamemode.Roles.Find(a => a.UUID == roles[i]);
+				Role role = ScriptManager.CurrentGamemode.Roles.Find(a => a.Internal_Name == roles[i]);
 				if (role != null)
 				{
 					rolesbytes[i] = (byte)(ScriptManager.CurrentGamemode.Roles.IndexOf(role) + 1);
@@ -225,7 +225,7 @@ namespace AmongUsCEDE.Core
 			List<GameData.PlayerInfo> PlayersToReturn = new List<GameData.PlayerInfo>();
 			for (int i = 0; i < GameData.Instance.AllPlayers.Count; i++)
 			{
-				if (GameData.Instance.AllPlayers[i].GetRole().RoleTeam == team)
+				if (GameData.Instance.AllPlayers[i].GetRole().Team == team)
 				{
 					PlayersToReturn.Add(GameData.Instance.AllPlayers[i]);
 				}
@@ -238,7 +238,7 @@ namespace AmongUsCEDE.Core
 			int amount = 0;
 			for (int i = 0; i < GameData.Instance.AllPlayers.Count; i++)
 			{
-				if (GameData.Instance.AllPlayers[i].GetRole().UUID == role)
+				if (GameData.Instance.AllPlayers[i].GetRole().Internal_Name == role)
 				{
 					amount++;
 				}

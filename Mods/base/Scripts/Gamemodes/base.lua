@@ -8,7 +8,6 @@ function InitializeGamemode()
 		has_tasks = true,
 		layer = 255, --special layer that shows everyone regardless of layer
 		team = 0,
-		imp_vision = false, --this variable wont exist forever, just a placeholder until custom settings
 		role_vis = 0,
 		color = {r=140,g=255,b=255},
 		name_color = {r=255,g=255,b=255}
@@ -24,7 +23,6 @@ function InitializeGamemode()
 		role_vis = 3,
 		layer = 0,
 		team = 1,
-		imp_vision = true,
 		primary_valid_targets = 0,
 		color = {r=255,g=25,b=25},
 		name_color = {r=255,g=25,b=25}
@@ -34,8 +32,6 @@ function InitializeGamemode()
 	CE_AddHook("OnEject", function(player)
 		--AAAAAAA
 	end)
-	
-	CE_AddIntSetting("sus_setting","Sus Level"," sus points", 50, 10, 0, 100)
 	
 	
 	return {"Base","base"} --Display Name then Internal Name

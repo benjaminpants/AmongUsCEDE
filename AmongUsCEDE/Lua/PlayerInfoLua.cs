@@ -127,7 +127,7 @@ namespace AmongUsCEDE.LuaData
 				HatId = plf.HatId;
 				SkinId = plf.SkinId;
 				PetId = plf.PetId;
-				Role = plf.GetRole().UUID;
+				Role = plf.GetRole().Internal_Name;
 				Disconnected = plf.Disconnected;
 				IsDead = plf.IsDead;
 				PosX = plf.Object.transform.position.x;
