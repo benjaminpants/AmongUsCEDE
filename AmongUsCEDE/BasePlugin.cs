@@ -19,6 +19,8 @@ namespace AmongUsCEDE
 		
 		public const int Lua_UserDataAmount = 4; //how many "UserData" variables are available to use. Beware increasing this increases packet size!
 
+		public const int MaxSettingAmount = 128; //this isn't exactly a limit, more of the index before conflicts with StringName start occuring
+
 		public const string CustomDataPrefix = "cede_";
 		public override void Load()
 		{

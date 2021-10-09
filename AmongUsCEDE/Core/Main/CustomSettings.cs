@@ -12,8 +12,10 @@ namespace AmongUsCEDE.Core.CustomSettings
 		Invalid,
 		Int,
 		Float,
-		Toggle
+		Toggle,
+		StringList
 	}
+
 
 
 	public class Setting
@@ -49,7 +51,15 @@ namespace AmongUsCEDE.Core.CustomSettings
 				case SettingType.Int:
 					writer.Write((int)Value);
 					break;
+				case SettingType.StringList:
+					writer.Write((byte)Value);
+					break;
 			}
+		}
+
+		public Setting()
+		{
+
 		}
 
 		public Setting(string internl, string externl, string adden, SettingType type, object defaul, float incr, object min, object max)
@@ -71,4 +81,50 @@ namespace AmongUsCEDE.Core.CustomSettings
 			return display_name + ": " + Value.ToString() + addend;
 		}
 	}
+
+
+	public class BoolSetting : Setting
+	{
+		public string[] ToggleStrings = new string[] { "True", "False" };
+
+		public BoolSetting(string internl, string externl, bool def, string[] togstrings)
+		{
+			internal_name = internl;
+			display_name = externl;
+			Default = def;
+			Value = def;
+			ToggleStrings = togstrings;
+			settingtype = SettingType.Toggle;
+		}
+
+		public override string ToString()
+		{
+			return display_name + ": " + ToggleStrings[((bool)Value) ? 0 : 1];
+		}
+	}
+
+	public class StringListSetting : Setting
+	{
+		public string[] Strings = new string[1];
+
+		public StringListSetting(string internl, string externl, byte defaul, string[] stringz)
+		{
+			internal_name = internl;
+			display_name = externl;
+			settingtype = SettingType.StringList;
+			Value = defaul;
+			Default = defaul;
+			Increment = 1f;
+			Min = 0;
+			Max = stringz.Length - 1;
+			Strings = stringz;
+		}
+
+		public override string ToString()
+		{
+			return display_name + ": " + Strings[((byte)Value)];
+		}
+	}
+
+
 }

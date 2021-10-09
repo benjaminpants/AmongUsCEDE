@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
 using AmongUsCEDE.Extensions;
 using AmongUsCEDE.Core;
-using AmongUsCEDE.Lua;
 using AmongUsCEDE.LuaData;
 using MoonSharp.Interpreter;
 using AmongUsCEDE.Core.CustomSettings;
@@ -102,14 +101,27 @@ namespace AmongUsCEDE.Mods
 
 		public static List<Setting> TempSettings = new List<Setting>(); //incase anyone asks, this is just to make sure settings always land up in the same place
 
+
+		public static void AddEnumToLuaScript(Script scr, string prefix, Type num)
+		{
+			string[] numnames = Enum.GetNames(num);
+			for (int i = 0; i < numnames.Length; i++)
+			{
+				scr.Globals[prefix + numnames[i]] = i;
+			}
+		}
+
+
 		public static bool LoadGamemode(string path, ref Mod ModToAddTo)
 		{
 			string text = "\n" + File.ReadAllText(path);
 			Script script = new Script(CoreModules.Preset_HardSandbox & CoreModules.OS_Time); //this makes it way more secure then before. adding OS_TIME cus i dont see any reason why not and someone may want it
-			script.DoString(InitCodes.InitialLua); //this doesn't even work
 			CodeScript cscript = new CodeScript(ScriptLanguage.Lua);
 			cscript.Script = script;
 			AddData(cscript, ScriptType.Gamemode, ScriptLanguage.Lua, true);
+			AddEnumToLuaScript(script, "RS_", typeof(RoleSpecials));
+			AddEnumToLuaScript(script, "RV_", typeof(RoleVisibility));
+			AddEnumToLuaScript(script, "VPT_", typeof(PrimaryTarget));
 			script.DoString(text);
 			DynValue vals = script.Call(script.Globals["InitializeGamemode"]);
 			if (vals.Type != DataType.Table) return false;
@@ -146,12 +158,15 @@ namespace AmongUsCEDE.Mods
 					script.Globals["CE_GetAllPlayersOnLayer"] = (Func<byte, bool, List<PlayerInfoLua>>)VariousScriptFunctions.GetAllOnLayer;
 					script.Globals["CE_GetAllPlayersOnTeam"] = (Func<byte, bool, List<PlayerInfoLua>>)VariousScriptFunctions.GetAllOnTeam;
 					script.Globals["CE_GetNumberSetting"] = (Func<string, float>)VariousScriptFunctions.GetNumberSetting;
+					script.Globals["CE_GetBoolSetting"] = (Func<string, bool>)VariousScriptFunctions.GetToggleSetting;
 					script.Globals["CE_GetInternalNumberSetting"] = (Func<string, float>)VariousScriptFunctions.GetInternalNumberSetting;
 					if (includeinit)
 					{
 						script.Globals["CE_AddRole"] = (Action<Table>)VariousScriptFunctions.AddRole;
 						script.Globals["CE_AddIntSetting"] = (Action<string, string, string, int, int, int, int>)VariousScriptFunctions.AddIntSetting;
 						script.Globals["CE_AddFloatSetting"] = (Action<string, string, string, float, float, float, float>)VariousScriptFunctions.AddFloatSetting;
+						script.Globals["CE_AddToggleSetting"] = (Action<string, string, bool, string[]>)VariousScriptFunctions.AddToggleSetting;
+						script.Globals["CE_AddStringSetting"] = (Action<string, string, byte, string[]>)VariousScriptFunctions.AddStringListSetting;
 						script.Globals["CE_AddHook"] = (Action<string,Closure>)VariousScriptFunctions.AddHookLua;
 					}
 					else
@@ -160,6 +175,8 @@ namespace AmongUsCEDE.Mods
 						script.Globals["CE_AddHook"] = null;
 						script.Globals["CE_AddIntSetting"] = null;
 						script.Globals["CE_AddFloatSetting"] = null;
+						script.Globals["CE_AddToggleSetting"] = null;
+						script.Globals["CE_AddStringSetting"] = null;
 					}
 					break;
 			}

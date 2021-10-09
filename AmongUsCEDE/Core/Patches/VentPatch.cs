@@ -24,8 +24,9 @@ internal class VentPatch
 		return true;
 	}
 
-	private static void Postfix(Vent __instance, GameData.PlayerInfo pc)
+	private static void Postfix(Vent __instance, GameData.PlayerInfo pc, ref bool couldUse)
 	{
+		couldUse = pc.GetRole().AvailableSpecials.Contains(RoleSpecials.Vent) && (!pc.IsDead && (pc.Object.CanMove || pc.Object.inVent));
 		if (pc.IsImpostor)
 		{
 			pc.IsImpostor = false;

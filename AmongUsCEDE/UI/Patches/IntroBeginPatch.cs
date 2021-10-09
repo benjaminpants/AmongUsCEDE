@@ -5,7 +5,7 @@ using HarmonyLib;
 
 [HarmonyPatch(typeof(IntroCutscene))]
 [HarmonyPatch("BeginCrewmate")]
-internal class IntroBeginPatch
+class IntroBeginPatch
 {
 	private static void Postfix(IntroCutscene __instance)
 	{

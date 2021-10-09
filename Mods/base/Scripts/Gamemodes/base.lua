@@ -4,11 +4,11 @@ function InitializeGamemode()
 		internal_name = "crewmate",
 		name = "Crewmate",
 		role_text = "There are impostors Among Us.",
-		specials = {3},
+		specials = {RS_Report},
 		has_tasks = true,
 		layer = 255, --special layer that shows everyone regardless of layer
 		team = 0,
-		role_vis = 0,
+		role_vis = RV_None,
 		color = {r=140,g=255,b=255},
 		name_color = {r=255,g=255,b=255}
 	})
@@ -18,12 +18,12 @@ function InitializeGamemode()
 		name = "Impostor",
 		role_text = "",
 		task_text = "Sabotage and kill everyone.",
-		specials = {0,1,2,3},
+		specials = {RS_Primary,RS_Sabotage,RS_Vent,RS_Report},
 		has_tasks = false,
-		role_vis = 3,
+		role_vis = RV_SameLayer,
 		layer = 0,
 		team = 1,
-		primary_valid_targets = 0,
+		primary_valid_targets = VPT_Others,
 		color = {r=255,g=25,b=25},
 		name_color = {r=255,g=25,b=25}
 	})
@@ -33,6 +33,8 @@ function InitializeGamemode()
 		--AAAAAAA
 	end)
 	
+	CE_AddStringSetting("vent_setting","Who Can Vent", 1, {"Impostors Only","Everybody","Nobody"})
+	CE_AddToggleSetting("end_on_zero_only","Game Only ends on 0 Crew", false, {"True","False"})
 	
 	return {"Base","base"} --Display Name then Internal Name
 end

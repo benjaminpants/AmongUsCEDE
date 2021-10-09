@@ -32,9 +32,7 @@ namespace AmongUsCEDE.RPCs
 				case 12:
 					if (GameData.Instance == null) return false;
 					PlayerControl user = MessageExtensions.ReadNetObject<PlayerControl>(reader);
-					DebugLog.ShowMessage(user.Data.PlayerName);
 					PlayerControl target = MessageExtensions.ReadNetObject<PlayerControl>(reader);
-					DebugLog.ShowMessage(target.Data.PlayerName);
 					bool DoAnimation = reader.ReadBoolean();
 					if (AmongUsClient.Instance.AmClient)
 					{

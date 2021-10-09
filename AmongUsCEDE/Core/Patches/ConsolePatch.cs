@@ -21,8 +21,11 @@ internal class ConsolePatch
 		return true;
 	}
 
-	private static void Postfix(Console __instance, GameData.PlayerInfo pc)
+	private static void Postfix(Console __instance, GameData.PlayerInfo pc, ref bool couldUse)
 	{
+		PlayerControl @object = pc.Object;
+		Vector2 truePosition = @object.GetTruePosition();
+		couldUse = ((!pc.IsDead || (PlayerControl.GameOptions.GhostsDoTasks && !__instance.GhostsIgnored)) && @object.CanMove && (__instance.AllowImpostor || pc.GetRole().HasTasks) && (!__instance.onlySameRoom || __instance.InRoom(truePosition)) && (!__instance.onlyFromBelow || truePosition.y < __instance.transform.position.y) && __instance.FindTask(@object));
 		if (pc.IsImpostor)
 		{
 			pc.IsImpostor = false;

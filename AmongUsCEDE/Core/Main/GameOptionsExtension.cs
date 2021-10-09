@@ -45,6 +45,9 @@ namespace AmongUsCEDE.Core
 					case SettingType.Toggle:
 						ScriptManager.CurrentGamemode.Settings[i].Value = reader.ReadBoolean();
 						break;
+					case SettingType.StringList:
+						ScriptManager.CurrentGamemode.Settings[i].Value = reader.ReadByte();
+						break;
 					default:
 						throw new NotImplementedException(ScriptManager.CurrentGamemode.Settings[i].settingtype + " not implemented! (GameOptionsData Deserialize)");
 				}
@@ -64,6 +67,12 @@ namespace AmongUsCEDE.Core
 					break;
 				case SettingType.Int:
 					customsetting.Value = behav.GetInt();
+					break;
+				case SettingType.Toggle:
+					customsetting.Value = behav.GetBool();
+					break;
+				case SettingType.StringList:
+					customsetting.Value = (byte)behav.GetInt();
 					break;
 			}
 

@@ -13,7 +13,7 @@ namespace AmongUsCEDE
 	{
 		public static List<PlayerColor> PlayerColors = new List<PlayerColor>
 		{
-			//new PlayerColor(new Color(0,0,0),new Color(0,0,0), new Color(255,255,255), true, "DIE")
+			//new PlayerColor(new Color(158f / 255f,1f,251f / 255f),new Color(115f / 255f,194f / 255f,206f / 255f), "Sky")
 		};
 	}
 
