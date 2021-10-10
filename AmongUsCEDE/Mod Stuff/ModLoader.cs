@@ -84,6 +84,14 @@ namespace AmongUsCEDE.Mods
 							}
 						}
 					}
+
+					if (Directory.Exists(Path.Combine(DS, "Resources")))
+					{
+						if (File.Exists(Path.Combine(DS, "Resources", "colors.json")))
+						{
+							CustomPalette.PlayerColors.AddRange(JsonConvert.DeserializeObject<List<PlayerColor>>(File.ReadAllText(Path.Combine(DS, "Resources", "colors.json"))));
+						}
+					}
 				}
 			}
 			else

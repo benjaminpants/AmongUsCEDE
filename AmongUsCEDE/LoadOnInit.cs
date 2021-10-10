@@ -25,20 +25,12 @@ namespace AmongUsCEDE
 	class TextPatch
 	{
 
+
+
 		public static void Postfix(VersionShower __instance)
 		{
 			DestroyableSingleton<ModManager>.Instance.ShowModStamp();
 			__instance.text.text = "Among Us: CE, DEV VERSION 0";
-			for (int i = 0; i < Palette.PlayerColors.Length; i++)
-			{
-				CustomPalette.PlayerColors.Add(new PlayerColor(Palette.PlayerColors[i], Palette.ShadowColors[i], Palette.ColorNames[i].ToString().Remove(0, 5)));
-			}
-			if (!CEManager.ModsLoaded)
-			{
-				ModLoader.LoadMods();
-			}
-
-			PlayerInfoExtensions.FlushAllExtensions(); //adds all PlayerInfoExtension stuff
 
 			__instance.text.text += "\nMods:" + ModLoader.Mods.Count;
 

@@ -109,8 +109,9 @@ namespace AmongUsCEDE.UI.Patches
 		{
 			static void Prefix(CustomPlayerMenu __instance)
 			{
-				if (AmongUsClient.Instance && !AmongUsClient.Instance.AmHost)
+				if (AmongUsClient.Instance)
 				{
+					if (AmongUsClient.Instance.AmHost) return;
 					GameObject DESTROY = GameObject.Find("GameTab");
 					if (DESTROY == null) return;
 					GameObject.Destroy(DESTROY);

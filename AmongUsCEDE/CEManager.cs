@@ -64,6 +64,10 @@ namespace AmongUsCEDE
 	{
 		public static bool ModsLoaded = false;
 
+		public static int Colors_Page = 0;
+
+		public static List<ColorChip> Select_Chips = new List<ColorChip>();
+
 		public static Role[] AllRoles //TODO: Find out if this is crazy ineffecient or something
 		{
 			get

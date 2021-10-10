@@ -18,6 +18,7 @@ namespace AmongUsCEDE
 	}
 
 
+
 	public class PlayerColor
 	{
 		public Color32 Base = Color.white;
