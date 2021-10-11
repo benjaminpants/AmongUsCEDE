@@ -14,6 +14,7 @@ using HarmonyLib;
 using System.Collections.Generic;
 using AmongUsCEDE.HelperExtensions;
 using AmongUsCEDE.Utilities;
+using AmongUsCEDE.Core;
 
 namespace AmongUsCEDE.Colors
 {
@@ -22,6 +23,7 @@ namespace AmongUsCEDE.Colors
 	class ColorMenuPatch
 	{
 		const int page_size = 24; //subtract by 4 for buttons, true page size is 28
+
 		static bool Prefix(PlayerTab __instance)
 		{
 			CEManager.Select_Chips = new List<ColorChip>();
@@ -57,17 +59,23 @@ namespace AmongUsCEDE.Colors
 				colorChip.Inner.color = CustomPalette.PlayerColors[i].Base;
 				__instance.ColorChips.Add(colorChip);
 			}
-			for (int i = 25; i < (page_size + 5); i++) //this is broken, fix it. aaaa
+			for (int i = 0; i < 5; i++) //this is incomplete, lol
 			{
-				float x = __instance.XRange.Lerp((float)(i % 4) / 3f);
-				float y = __instance.YStart - (float)(i / 4) * num2;
+				int i_modded = i + page_size;
+				float x = __instance.XRange.Lerp((float)(i_modded % 4) / 3f);
+				float y = __instance.YStart - (float)(i_modded / 4) * num2;
 				ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab);
 				colorChip.transform.SetParent(__instance.ColorTabArea);
 				colorChip.transform.localPosition = new Vector3(x, y, -1f);
 				int j = i;
 				
 				Texture2D tex = ResourcesManager.GetTexture("colorchip_special.png", "");
-				colorChip.Inner.BackLayer.sprite = Sprite.Create(tex, new Rect(0f,0f,tex.width,tex.height), new Vector2(0.5f,0.5f));
+				DebugLog.ShowMessage("x" + colorChip.Inner.BackLayer.sprite.texture.width);
+				DebugLog.ShowMessage("y" + colorChip.Inner.BackLayer.sprite.texture.height);
+				Sprite torture = Sprite.Create(tex, new Rect(0f, 0f, 43f, 43f), Vector2.zero);
+				colorChip.Inner.BackLayer.sprite = torture;
+				colorChip.Inner.FrontLayer.sprite = torture;
+				colorChip.Inner.color = Color.white;
 			}
 			return false;
 		}

@@ -16,12 +16,12 @@ namespace AmongUsCEDE.Utilities
 		public static Texture2D GetTexture(string id, string file_path, bool cache = false) //AVOID CACHING. Its an option here to increase reload times for frequently used assets, but anything outside of UI probably shouldn't be cached
 		{
 			if (Textures.TryGetValue(id, out Texture2D tex)) return tex;
-			Texture2D texture2D = null;
+			Texture2D texture2D = Texture2D.whiteTexture;
 			if (File.Exists(file_path))
 			{
 				byte[] data = File.ReadAllBytes(file_path);
 				texture2D = new Texture2D(2, 2);
-				texture2D.LoadRawTextureData(data);
+				texture2D.LoadRawTextureData(); //this is broken, LoadImage for some reason does not exist. grrrrr
 			}
 			else
 			{
@@ -46,7 +46,7 @@ namespace AmongUsCEDE.Utilities
 					{
 						foreach (string path in Directory.GetFiles(Path.Combine(TexturesPath, "AutoCache")))
 						{
-							//DebugLog.ShowMessage("caching:" + path);
+							DebugLog.ShowMessage("caching:" + new FileInfo(path).Name);
 							GetTexture(new FileInfo(path).Name,path,true); //caches the texture
 						}
 					}
