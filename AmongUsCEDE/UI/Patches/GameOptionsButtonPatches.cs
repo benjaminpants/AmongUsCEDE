@@ -18,6 +18,11 @@ namespace AmongUsCEDE.UI.Patches
 		{
 			static bool Prefix(NumberOption __instance)
 			{
+				if ((int)__instance.Title >= AmongUsCEDE.HardcodedSettingStringOverrideStart)
+				{
+					__instance.FixedUpdate();
+					return false;
+				}
 				if ((int)__instance.Title <= AmongUsCEDE.MaxSettingAmount)
 				{
 					__instance.FixedUpdate();
@@ -33,6 +38,11 @@ namespace AmongUsCEDE.UI.Patches
 		{
 			static bool Prefix(ToggleOption __instance)
 			{
+				if ((int)__instance.Title >= AmongUsCEDE.HardcodedSettingStringOverrideStart)
+				{
+					__instance.FixedUpdate();
+					return false;
+				}
 				if ((int)__instance.Title <= AmongUsCEDE.MaxSettingAmount)
 				{
 					__instance.FixedUpdate();
@@ -48,6 +58,11 @@ namespace AmongUsCEDE.UI.Patches
 		{
 			static bool Prefix(StringOption __instance)
 			{
+				if ((int)__instance.Title >= AmongUsCEDE.HardcodedSettingStringOverrideStart)
+				{
+					__instance.FixedUpdate();
+					return false;
+				}
 				if ((int)__instance.Title <= AmongUsCEDE.MaxSettingAmount)
 				{
 					__instance.FixedUpdate();

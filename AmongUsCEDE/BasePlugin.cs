@@ -39,6 +39,8 @@ namespace AmongUsCEDE
 
 		public const int MaxSettingAmount = 128; //this isn't exactly a limit, more of the index before conflicts with StringName start occuring
 
+		public const int HardcodedSettingStringOverrideStart = 2021; //the start of strings where hardcoded settings start taking StringNames
+
 		public const string CustomDataPrefix = "cede_";
 
 		public const CE_Features features = (CE_Features.CustomHats | CE_Features.LiveModDisables);
