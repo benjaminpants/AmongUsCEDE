@@ -15,6 +15,19 @@ using AmongUsCEDE.Utilities;
 
 namespace AmongUsCEDE
 {
+
+	[Flags]
+	public enum CE_Features //an enum, containing which features should be enabled in this build of CE.
+	{
+		None = 0,
+		CustomColors = 1,
+		CustomHats = 2,
+		LiveModDisables = 4
+	}
+
+
+
+
 	[BepInPlugin("mtm101.rulerp.moogus.amongusce")]
 	[BepInProcess("Among Us.exe")]
 	public class AmongUsCEDE : BasePlugin
@@ -26,6 +39,8 @@ namespace AmongUsCEDE
 		public const int MaxSettingAmount = 128; //this isn't exactly a limit, more of the index before conflicts with StringName start occuring
 
 		public const string CustomDataPrefix = "cede_";
+
+		public const CE_Features features = (CE_Features.CustomColors | CE_Features.CustomHats);
 
 		private void LoadMods()
 		{
@@ -40,6 +55,12 @@ namespace AmongUsCEDE
 
 			PlayerInfoExtensions.FlushAllExtensions(); //adds all PlayerInfoExtension stuff
 		}
+
+		public static bool Feature_Enabled(CE_Features feature)
+		{
+			return ((features & feature) == feature);
+		}
+
 
 		public override void Load()
 		{

@@ -89,6 +89,7 @@ namespace AmongUsCEDE.Mods
 					{
 						if (File.Exists(Path.Combine(DS, "Resources", "colors.json")))
 						{
+							if (!AmongUsCEDE.Feature_Enabled(CE_Features.CustomColors)) continue;
 							CustomPalette.PlayerColors.AddRange(JsonConvert.DeserializeObject<List<PlayerColor>>(File.ReadAllText(Path.Combine(DS, "Resources", "colors.json"))));
 						}
 					}

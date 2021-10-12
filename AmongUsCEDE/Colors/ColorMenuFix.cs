@@ -63,6 +63,7 @@ namespace AmongUsCEDE.Colors
 
 		static bool Prefix(PlayerTab __instance)
 		{
+			if (!AmongUsCEDE.Feature_Enabled(CE_Features.CustomColors)) return true;
 			if (arrow_chips.Count != 0)
 			{
 				for (int i = 0; i < arrow_chips.Count; i++)
@@ -165,6 +166,7 @@ namespace AmongUsCEDE.Colors
 	{
 		static bool Prefix(PlayerTab __instance, ref ColorChip __result)
 		{
+			if (!AmongUsCEDE.Feature_Enabled(CE_Features.CustomColors)) return true;
 			__result = __instance.ColorChips[PlayerControl.LocalPlayer.Data.ColorId % (ColorMenuPatch.page_size + 1)];
 			return false;
 		}
@@ -176,6 +178,7 @@ namespace AmongUsCEDE.Colors
 	{
 		static void Postfix()
 		{
+			if (!AmongUsCEDE.Feature_Enabled(CE_Features.CustomColors)) return;
 			for (int i = 0; i < ColorMenuPatch.arrow_chips.Count; i++)
 			{
 				GameObject.Destroy(ColorMenuPatch.arrow_chips[i]);
@@ -190,6 +193,7 @@ namespace AmongUsCEDE.Colors
 	{
 		static bool Prefix(PlayerTab __instance)
 		{
+			if (!AmongUsCEDE.Feature_Enabled(CE_Features.CustomColors)) return true;
 			__instance.UpdateAvailableColors();
 			for (int i = 0; i < __instance.ColorChips.Count; i++)
 			{
@@ -205,6 +209,7 @@ namespace AmongUsCEDE.Colors
 	{
 		static bool Prefix(PlayerTab __instance)
 		{
+			if (!AmongUsCEDE.Feature_Enabled(CE_Features.CustomColors)) return true;
 			PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.Data.ColorId, __instance.DemoImage);
 			PlayerControl.SetPetImage(SaveManager.LastPet, PlayerControl.LocalPlayer.Data.ColorId, __instance.PetImage);
 			for (int i = 0; i < CustomPalette.PlayerColors.Count; i++)
