@@ -15,6 +15,7 @@ namespace AmongUsCEDE.Utilities
 
 		public static Texture2D GetTexture(string id, string file_path, bool cache = false) //AVOID CACHING. Its an option here to increase reload times for frequently used assets, but anything outside of UI probably shouldn't be cached
 		{
+			if (!AmongUsCEDE.Feature_Enabled(CE_Features.TextureLoading)) return Texture2D.whiteTexture;
 			if (Textures.TryGetValue(id, out Texture2D tex))
 			{
 				if (tex == null) return Texture2D.whiteTexture;
@@ -39,6 +40,7 @@ namespace AmongUsCEDE.Utilities
 	
 		public static void LoadAllTextures()
 		{
+			if (!AmongUsCEDE.Feature_Enabled(CE_Features.TextureLoading)) return;
 			string AttemptedDir = Path.Combine(CEExtensions.GetGameDirectory(), "Resources");
 			if (Directory.Exists(AttemptedDir))
 			{

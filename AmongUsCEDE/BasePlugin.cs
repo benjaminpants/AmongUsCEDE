@@ -20,9 +20,10 @@ namespace AmongUsCEDE
 	public enum CE_Features //an enum, containing which features should be enabled in this build of CE.
 	{
 		None = 0,
-		CustomColors = 1,
-		CustomHats = 2,
-		LiveModDisables = 4
+		TextureLoading = 1,
+		CustomColors = 2,
+		CustomHats = 4,
+		LiveModDisables = 8
 	}
 
 
@@ -40,7 +41,7 @@ namespace AmongUsCEDE
 
 		public const string CustomDataPrefix = "cede_";
 
-		public const CE_Features features = (CE_Features.CustomColors | CE_Features.CustomHats);
+		public const CE_Features features = (CE_Features.CustomHats | CE_Features.LiveModDisables);
 
 		private void LoadMods()
 		{

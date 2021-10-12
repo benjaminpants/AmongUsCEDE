@@ -16,6 +16,10 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
 
+
+//only compile this work around for debug builds, so multiple instances don't break
+#if DEBUG
+
 namespace AmongUsCEDE
 {
 	internal class NoMoreAchievements
@@ -34,3 +38,5 @@ namespace AmongUsCEDE
 	}
 
 }
+
+#endif
