@@ -166,6 +166,7 @@ namespace AmongUsCEDE
 					catch (Exception E)
 					{
 						DebugLog.ShowMessage("Caught Lua Error(" + function + "):" + E.Message);
+						AmongUsClient.Instance.EnqueueDisconnect(InnerNet.DisconnectReasons.Custom, "Lua Error(" + function + "):" + E.Message);
 						return null;
 					}
 					break;
