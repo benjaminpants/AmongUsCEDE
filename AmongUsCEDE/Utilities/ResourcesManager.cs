@@ -15,13 +15,18 @@ namespace AmongUsCEDE.Utilities
 
 		public static Texture2D GetTexture(string id, string file_path, bool cache = false) //AVOID CACHING. Its an option here to increase reload times for frequently used assets, but anything outside of UI probably shouldn't be cached
 		{
-			if (Textures.TryGetValue(id, out Texture2D tex)) return tex;
+			//currently any texture, even ones that SHOULD be cast and ARE found, is null. its getting tex and is succeeding at converting png to image... so why is it failing?
+			if (Textures.TryGetValue(id, out Texture2D tex))
+			{
+				if (tex == null) return Texture2D.whiteTexture;
+				return tex;
+			}
 			Texture2D texture2D = Texture2D.whiteTexture;
 			if (File.Exists(file_path))
 			{
 				byte[] data = File.ReadAllBytes(file_path);
 				texture2D = new Texture2D(2, 2);
-				texture2D.LoadRawTextureData(); //this is broken, LoadImage for some reason does not exist. grrrrr
+				ImageConversion.LoadImage(texture2D, data);
 			}
 			else
 			{

@@ -59,7 +59,7 @@ namespace AmongUsCEDE.Colors
 				colorChip.Inner.color = CustomPalette.PlayerColors[i].Base;
 				__instance.ColorChips.Add(colorChip);
 			}
-			for (int i = 0; i < 5; i++) //this is incomplete, lol
+			for (int i = 0; i < 4; i++) //this is incomplete, lol
 			{
 				int i_modded = i + page_size;
 				float x = __instance.XRange.Lerp((float)(i_modded % 4) / 3f);
@@ -70,9 +70,7 @@ namespace AmongUsCEDE.Colors
 				int j = i;
 				
 				Texture2D tex = ResourcesManager.GetTexture("colorchip_special.png", "");
-				DebugLog.ShowMessage("x" + colorChip.Inner.BackLayer.sprite.texture.width);
-				DebugLog.ShowMessage("y" + colorChip.Inner.BackLayer.sprite.texture.height);
-				Sprite torture = Sprite.Create(tex, new Rect(0f, 0f, 43f, 43f), Vector2.zero);
+				Sprite torture = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), Vector2.zero);
 				colorChip.Inner.BackLayer.sprite = torture;
 				colorChip.Inner.FrontLayer.sprite = torture;
 				colorChip.Inner.color = Color.white;
