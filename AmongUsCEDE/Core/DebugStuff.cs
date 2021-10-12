@@ -11,6 +11,11 @@ namespace AmongUsCEDE.Core
 			System.Diagnostics.Trace.WriteLine(msg);
 		}
 
+		public static void ShowMessage(object obj)
+		{
+			ShowMessage(obj.ToString());
+		}
+
 		public static void PrintArray(object[] array)
 		{
 			string concat = "(";

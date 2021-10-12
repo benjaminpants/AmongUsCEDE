@@ -22,11 +22,55 @@ namespace AmongUsCEDE.Colors
 	[HarmonyPatch("OnEnable")]
 	class ColorMenuPatch
 	{
-		const int page_size = 24; //subtract by 4 for buttons, true page size is 28
+		public const int page_size = 24; //subtract by 4 for buttons, true page size is 28
+
+		public static List<ColorChip> arrow_chips = new List<ColorChip>();
+
+
+		public static void SetPage(PlayerTab instance, int page)
+		{
+			CEManager.Colors_Page = page;
+			int max_page = Mathf.CeilToInt((float)CustomPalette.PlayerColors.Count / (float)page_size) - 1;
+			if (CEManager.Colors_Page > max_page)
+			{
+				CEManager.Colors_Page = max_page;
+			}
+			else if (CEManager.Colors_Page < 0)
+			{
+				CEManager.Colors_Page = 0;
+			}
+			instance.OnDisable();
+			instance.OnEnable();
+		}
+
+		public static void ChangePage(PlayerTab instance, int page)
+		{
+			CEManager.Colors_Page += page;
+			int max_page = Mathf.CeilToInt((float)CustomPalette.PlayerColors.Count / (float)page_size) - 1;
+			if (CEManager.Colors_Page > max_page)
+			{
+				CEManager.Colors_Page = max_page;
+			}
+			else if (CEManager.Colors_Page < 0)
+			{
+				CEManager.Colors_Page = 0;
+			}
+			instance.OnDisable();
+			instance.OnEnable();
+		}
+
+
 
 		static bool Prefix(PlayerTab __instance)
 		{
-			CEManager.Select_Chips = new List<ColorChip>();
+			if (arrow_chips.Count != 0)
+			{
+				for (int i = 0; i < arrow_chips.Count; i++)
+				{
+					GameObject.Destroy(arrow_chips[i]);
+				}
+				arrow_chips = new List<ColorChip>();
+			}
 			int max_page = Mathf.CeilToInt((float)CustomPalette.PlayerColors.Count / (float)page_size) - 1;
 			if (CEManager.Colors_Page > max_page)
 			{
@@ -43,14 +87,15 @@ namespace AmongUsCEDE.Colors
 			PlayerControl.SetPetImage(SaveManager.LastPet, PlayerControl.LocalPlayer.Data.ColorId, __instance.PetImage);
 			float num = (float)CustomPalette.PlayerColors.Count / 4f;
 			float num2 = 0.55f;
-			for (int i = (CEManager.Colors_Page * (page_size - 1)); i < max_amount; i++)
+			for (int i = (CEManager.Colors_Page * (page_size - 1)); i < max_amount; i++) //WHY THE FUCK IS THERE A STRAY COLOR WHEN PAGES SWITCH???
 			{
-				int i_modded = i % (page_size + 1);
+				int i_modded = i % (page_size);
 				float x = __instance.XRange.Lerp((float)(i_modded % 4) / 3f);
 				float y = __instance.YStart - (float)(i_modded / 4) * num2;
 				ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab);
 				colorChip.transform.SetParent(__instance.ColorTabArea);
 				colorChip.transform.localPosition = new Vector3(x, y, -1f);
+				DebugLog.ShowMessage("creating color:" + i);
 				int j = i;
 				colorChip.Button.OnClick.AddListener((Action)delegate
 				{
@@ -67,13 +112,88 @@ namespace AmongUsCEDE.Colors
 				ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab);
 				colorChip.transform.SetParent(__instance.ColorTabArea);
 				colorChip.transform.localPosition = new Vector3(x, y, -1f);
-				int j = i;
+				string texture_to_grab = "colorchip_double_left.png";
+				switch (i)
+				{
+					case 0:
+						texture_to_grab = "colorchip_double_left.png";
+						colorChip.Button.OnClick.AddListener((Action)delegate
+						{
+							SetPage(__instance,0);
+						});
+						break;
+					case 1:
+						texture_to_grab = "colorchip_left.png";
+						colorChip.Button.OnClick.AddListener((Action)delegate
+						{
+							ChangePage(__instance, -1);
+						});
+						break;
+					case 2:
+						texture_to_grab = "colorchip_right.png";
+						colorChip.Button.OnClick.AddListener((Action)delegate
+						{
+							ChangePage(__instance, 1);
+						});
+						break;
+					case 3:
+						texture_to_grab = "colorchip_double_right.png";
+						colorChip.Button.OnClick.AddListener((Action)delegate
+						{
+							SetPage(__instance, max_page);
+						});
+						break;
+
+				}
 				
-				Texture2D tex = ResourcesManager.GetTexture("colorchip_special.png", "");
-				Sprite torture = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), Vector2.zero);
+				Texture2D tex = ResourcesManager.GetTexture(texture_to_grab, "");
+				Sprite torture = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), new Vector2(0.5f,0.5f));
 				colorChip.Inner.BackLayer.sprite = torture;
 				colorChip.Inner.FrontLayer.sprite = torture;
 				colorChip.Inner.color = Color.white;
+
+				arrow_chips.Add(colorChip);
+			}
+			return false;
+		}
+	}
+
+
+	[HarmonyPatch(typeof(PlayerTab))]
+	[HarmonyPatch("GetDefaultSelectable")]
+	class DefaultSelectablePatch
+	{
+		static bool Prefix(PlayerTab __instance, ref ColorChip __result)
+		{
+			__result = __instance.ColorChips[PlayerControl.LocalPlayer.Data.ColorId % (ColorMenuPatch.page_size + 1)];
+			return false;
+		}
+	}
+	
+	[HarmonyPatch(typeof(PlayerTab))]
+	[HarmonyPatch("OnDisable")]
+	class ColorDisablePatch
+	{
+		static void Postfix()
+		{
+			for (int i = 0; i < ColorMenuPatch.arrow_chips.Count; i++)
+			{
+				GameObject.Destroy(ColorMenuPatch.arrow_chips[i]);
+			}
+			ColorMenuPatch.arrow_chips = new List<ColorChip>();
+		}
+	}
+
+	[HarmonyPatch(typeof(PlayerTab))]
+	[HarmonyPatch("Update")]
+	class ColorUpdate
+	{
+		static bool Prefix(PlayerTab __instance)
+		{
+			__instance.UpdateAvailableColors();
+			for (int i = 0; i < __instance.ColorChips.Count; i++)
+			{
+				__instance.ColorChips[i].InUseForeground.SetActive(!__instance.AvailableColors.Contains(i + CEManager.Colors_Page * (ColorMenuPatch.page_size - 1)));
 			}
 			return false;
 		}
@@ -81,7 +201,7 @@ namespace AmongUsCEDE.Colors
 
 	[HarmonyPatch(typeof(PlayerTab))]
 	[HarmonyPatch("UpdateAvailableColors")]
-	class ColorUpdate
+	class ColorAvailableUpdate
 	{
 		static bool Prefix(PlayerTab __instance)
 		{
