@@ -24,6 +24,7 @@ function InitializeGamemode()
 		layer = 0,
 		team = 1,
 		primary_valid_targets = VPT_Others,
+		immune_to_light_affectors = true,
 		color = {r=255,g=25,b=25},
 		name_color = {r=255,g=25,b=25}
 	})
@@ -38,6 +39,26 @@ function InitializeGamemode()
 	
 	return {"Base","base"} --Display Name then Internal Name
 end
+
+local function lerp(a, b, t)
+	return a + (b - a) * t
+end
+
+function CalculateLightRadius(player,minradius,maxradius,lightsab) --lightsab is a float ranging from 0-1
+	local mult = CE_GetInternalNumberSetting("crewmate_vision")
+	if (player.Role == "impostor") then
+		return maxradius * CE_GetInternalNumberSetting("impostor_vision")
+	else
+		mult = CE_GetInternalNumberSetting("crewmate_vision")
+	end
+	
+	
+	
+	
+	return lerp(minradius,maxradius,lightsab) * mult
+
+end
+
 
 function SelectRoles(players)
 	return {{players[1],players[2],players[3],players[4]},{"impostor","crewmate","crewmate","crewmate"}}

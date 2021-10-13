@@ -78,7 +78,9 @@ namespace AmongUsCEDE.Core
 
 		public Color RoleTextColor = Color.white;
 
-		public bool HasTasks;
+		public bool HasTasks = true;
+
+		public bool ImmuneToAffectors;
 
 		public byte Layer;
 

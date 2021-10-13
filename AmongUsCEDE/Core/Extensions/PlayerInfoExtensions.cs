@@ -29,7 +29,7 @@ namespace AmongUsCEDE.Core.Extensions
 	{
 		public static PlayerInfoExtension[] Extensions = new PlayerInfoExtension[15];
 
-		private static Role NoneRole = new Role("internal", "Null");
+		private static Role NoneRole = new Role("none", "Null");
 
 		public static Role GetRole(this GameData.PlayerInfo me)
 		{
