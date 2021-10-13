@@ -132,7 +132,7 @@ namespace AmongUsCEDE.Mods
 			role.FakeTaskString = parms.TryGet("task_text", DynValue.NewString("Define task_text please lol")).String;
 			role.Visibility = (RoleVisibility)parms.TryGet("role_vis", DynValue.NewNumber(0)).Number;
 			role.HasTasks = parms.TryGet("has_tasks", DynValue.True).Boolean;
-			role.ImmuneToAffectors = parms.TryGet("immune_to_light_affectors", DynValue.True).Boolean;
+			role.ImmuneToAffectors = parms.TryGet("immune_to_light_affectors", DynValue.False).Boolean;
 			DebugLog.ShowMessage(role.HasTasks.ToString());
 			role.Layer = (byte)parms.TryGet("layer", DynValue.NewNumber(255)).Number;
 			role.Team = (byte)parms.TryGet("team", DynValue.NewNumber(0)).Number;
