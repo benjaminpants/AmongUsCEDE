@@ -30,8 +30,16 @@ function InitializeGamemode()
 	})
 	
 	
-	CE_AddHook("OnEject", function(player)
-		--AAAAAAA
+	CE_AddHook("CanVent", function(player, usual)
+		local vent_set = CE_GetNumberSetting("vent_setting")
+		if (vent_set == 1) then
+			return usual
+		elseif (vent_set == 2) then
+			return true
+		else
+			return false
+		end
+		return usual
 	end)
 	
 	CE_AddStringSetting("vent_setting","Who Can Vent", 1, {"Impostors Only","Everybody","Nobody"})

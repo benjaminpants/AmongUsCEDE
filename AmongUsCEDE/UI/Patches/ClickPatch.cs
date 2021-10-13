@@ -8,7 +8,7 @@ internal class ClickPatch
 {
 	private static void Prefix(UseButtonManager __instance)
 	{
-		if (PlayerControl.LocalPlayer.Data.GetRole().AvailableSpecials.Contains(RoleSpecials.Sabotage))
+		if (PlayerControl.LocalPlayer.Data.GetRole().CanDo(RoleSpecials.Sabotage, PlayerControl.LocalPlayer.Data))
 		{
 			PlayerControl.LocalPlayer.Data.IsImpostor = true;
 		}

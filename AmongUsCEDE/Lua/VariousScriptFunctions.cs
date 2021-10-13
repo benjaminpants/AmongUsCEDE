@@ -64,6 +64,13 @@ namespace AmongUsCEDE.Mods
 			ModLoader.TempSettings.Add(new StringListSetting(intern_name,display_name, (byte)((int)defau - 1),stringstuffs));
 		}
 
+		public static bool AmHost()
+		{
+			if (!AmongUsClient.Instance) return false;
+			return AmongUsClient.Instance.AmHost;
+		}
+
+
 		public static float GetInternalNumberSetting(string setting_name)
 		{
 			switch (setting_name)
@@ -85,7 +92,8 @@ namespace AmongUsCEDE.Mods
 
 		public static float GetNumberSetting(string internal_name)
 		{
-			Setting setting = ScriptManager.CurrentGamemode.Settings.Find(s => s.display_name == internal_name);
+			Setting setting = ScriptManager.CurrentGamemode.Settings.Find(s => s.internal_name == internal_name);
+			if (setting == null) return -1f;
 			if (setting.settingtype == SettingType.Float || setting.settingtype == SettingType.Int || setting.settingtype == SettingType.StringList)
 			{
 				if (setting.settingtype == SettingType.Float) //TODO: figure out if this is necessary
@@ -106,7 +114,7 @@ namespace AmongUsCEDE.Mods
 
 		public static bool GetToggleSetting(string internal_name)
 		{
-			Setting setting = ScriptManager.CurrentGamemode.Settings.Find(s => s.display_name == internal_name);
+			Setting setting = ScriptManager.CurrentGamemode.Settings.Find(s => s.internal_name == internal_name);
 			if (setting.settingtype == SettingType.Toggle)
 			{
 				return (bool)setting.Value;

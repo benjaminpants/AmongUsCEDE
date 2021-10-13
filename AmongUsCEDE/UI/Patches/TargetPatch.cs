@@ -11,7 +11,7 @@ internal class TargetPatch
 		if (target == null)
 		{
 			PlayerControl localPlayer = PlayerControl.LocalPlayer;
-			if (((localPlayer != null) ? localPlayer.Data : null) != null && PlayerControl.LocalPlayer.Data.GetRole().AvailableSpecials.Contains(RoleSpecials.Sabotage) && PlayerControl.LocalPlayer.CanMove)
+			if (((localPlayer != null) ? localPlayer.Data : null) != null && PlayerControl.LocalPlayer.Data.GetRole().CanDo(RoleSpecials.Sabotage,localPlayer.Data) && PlayerControl.LocalPlayer.CanMove)
 			{
 				__instance.RefreshButtons();
 				__instance.currentButtonShown = __instance.otherButtons[ImageNames.SabotageButton];

@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using AmongUsCEDE.Core.Extensions;
 using AmongUsCEDE.LuaData;
+using MoonSharp.Interpreter;
 
 
 public enum RoleSpecials
@@ -67,6 +68,25 @@ namespace AmongUsCEDE.Core
 				default:
 					throw new NotImplementedException("RoleVisibility is set to an invalid/undefined state! (" + Visibility + ")");
 			}
+		}
+
+
+
+		public bool CanDo(RoleSpecials special, GameData.PlayerInfo pc)
+		{
+			if (Internal_Name == "None") return false;
+			if (special == RoleSpecials.Vent && pc != null)
+			{
+				DynValue val = ScriptManager.CallCurrentGMHooks("CanVent",(PlayerInfoLua)pc, AvailableSpecials.Contains(RoleSpecials.Vent));
+				if (val != null)
+				{
+					if (val.Type == DataType.Boolean)
+					{
+						return val.Boolean;
+					}
+				}
+			}
+			return AvailableSpecials.Contains(special);
 		}
 
 

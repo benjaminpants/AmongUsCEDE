@@ -22,7 +22,7 @@ namespace AmongUsCEDE.Core
 
 	public static class GameFunctions
 	{
-		public static void RpcSetRoles(PlayerControl self, GameData.PlayerInfo[] players, string[] roles)
+		public static void RpcSetRoles(PlayerControl self, GameData.PlayerInfo[] players, string[] roles, bool intro = true)
 		{
 			byte[] array = (from p in players
 							select p.PlayerId).ToArray<byte>();
@@ -41,9 +41,10 @@ namespace AmongUsCEDE.Core
 			}
 			if (AmongUsClient.Instance.AmClient)
 			{
-				SetRoles(self, array, rolesbytes, true);
+				SetRoles(self, array, rolesbytes, intro);
 			}
 			MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(self.NetId, 3, SendOption.Reliable);
+			messageWriter.Write(intro);
 			messageWriter.WriteBytesAndSize(array);
 			messageWriter.WriteBytesAndSize(rolesbytes);
 			messageWriter.EndMessage();
@@ -140,10 +141,10 @@ namespace AmongUsCEDE.Core
 			GameData.PlayerInfo data = PlayerControl.LocalPlayer.Data;
 			Role myrole = data.GetRole();
 			DestroyableSingleton<HudManager>.Instance.MapButton.gameObject.SetActive(true);
-			DestroyableSingleton<HudManager>.Instance.ReportButton.gameObject.SetActive(myrole.AvailableSpecials.Contains(RoleSpecials.Report));
+			DestroyableSingleton<HudManager>.Instance.ReportButton.gameObject.SetActive(myrole.CanDo(RoleSpecials.Report,data));
 			DestroyableSingleton<HudManager>.Instance.UseButton.gameObject.SetActive(true);
 			PlayerControl.LocalPlayer.RemainingEmergencies = PlayerControl.GameOptions.NumEmergencyMeetings;
-			if (myrole.AvailableSpecials.Contains(RoleSpecials.Primary))
+			if (myrole.CanDo(RoleSpecials.Primary, data))
 			{
 				DestroyableSingleton<HudManager>.Instance.KillButton.gameObject.SetActive(true);
 				PlayerControl.LocalPlayer.SetKillTimer(10f);

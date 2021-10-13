@@ -126,9 +126,9 @@ namespace AmongUsCEDE
 							break;
 					}
 				}
-				catch (Exception E)
+				catch (ScriptRuntimeException E)
 				{
-					DebugLog.ShowMessage("Caught Hook Error(" + hook + "):" + E.Message);
+					DebugLog.ShowMessage("Caught Hook Error(" + hook + "):" + E.DecoratedMessage);
 					return null;
 				}
 			}

@@ -10,7 +10,7 @@ internal class VentPatch
 	private static bool Prefix(Vent __instance, GameData.PlayerInfo pc)
 	{
 		PlayerControl @object = pc.Object;
-		if (!pc.GetRole().AvailableSpecials.Contains(RoleSpecials.Vent))
+		if (!pc.GetRole().CanDo(RoleSpecials.Vent,pc))
 		{
 			return true;
 		}
@@ -26,7 +26,7 @@ internal class VentPatch
 
 	private static void Postfix(Vent __instance, GameData.PlayerInfo pc, ref bool couldUse)
 	{
-		couldUse = pc.GetRole().AvailableSpecials.Contains(RoleSpecials.Vent) && (!pc.IsDead && (pc.Object.CanMove || pc.Object.inVent));
+		couldUse = pc.GetRole().CanDo(RoleSpecials.Vent, pc) && (!pc.IsDead && (pc.Object.CanMove || pc.Object.inVent));
 		if (pc.IsImpostor)
 		{
 			pc.IsImpostor = false;

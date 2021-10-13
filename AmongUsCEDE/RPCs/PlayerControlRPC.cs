@@ -27,7 +27,8 @@ namespace AmongUsCEDE.RPCs
 					GameOptionsExtension.Deserialize(reader);
 					return false;
 				case 3: //overwrite set impostors cuz impostors no exist anymore
-					GameFunctions.SetRoles(__instance, reader.ReadBytesAndSize(), reader.ReadBytesAndSize(), true); //reads the two arrays for players and roles
+					bool dointro = reader.ReadBoolean();
+					GameFunctions.SetRoles(__instance, reader.ReadBytesAndSize(), reader.ReadBytesAndSize(), dointro); //reads the two arrays for players and roles
 					return false;
 				case 12:
 					if (GameData.Instance == null) return false;
