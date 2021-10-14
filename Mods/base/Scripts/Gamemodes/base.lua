@@ -44,6 +44,7 @@ function InitializeGamemode()
 	
 	CE_AddStringSetting("vent_setting","Who Can Vent", 1, {"Impostors Only","Everybody","Nobody"})
 	CE_AddToggleSetting("end_on_zero_only","Game Only ends on 0 Crew", false, {"True","False"})
+
 	
 	return {"Base","base"} --Display Name then Internal Name
 end
@@ -67,28 +68,34 @@ function CalculateLightRadius(player,minradius,maxradius,lightsab) --lightsab is
 
 end
 
-
 local function insert_table_fixed(tab, addend) --work around for broken moonsharp stuff, TODO: fix moonsharp lol
 	tab[#tab + 1] = addend
 end
 
 
-function SelectRoles(players)
+
+
+
+function SelectRoles(players) --WHAT. THE FUCK. IS GOING ON.
 	
 	local roles_to_select = {}
 	local players_finished = {}
 	for i=1, CE_GetInternalNumberSetting("impostor_count") do
 		insert_table_fixed(roles_to_select,"impostor")
 	end
-	
+	print("got past imp")
 	for i=1, #players - #roles_to_select do
 		insert_table_fixed(roles_to_select,"crewmate")
 	end
+	print("got past crew")
 	for i=1, #roles_to_select do
 		local id = math.random(1,#players)
+		print("selected id")
 		while players[id] == nil do
+			print("reselecting id")
 			local id = math.random(1,#players)
 		end
+		print("adding to table")
 		insert_table_fixed(players_finished,players[id])
 		players[id] = nil
 	end

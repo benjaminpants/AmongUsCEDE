@@ -124,7 +124,7 @@ namespace AmongUsCEDE.Mods
 		public static bool LoadGamemode(string path, ref Mod ModToAddTo)
 		{
 			string text = "\n" + File.ReadAllText(path);
-			Script script = new Script(CoreModules.Preset_HardSandbox & CoreModules.OS_Time & CoreModules.Table); //this makes it way more secure then before. adding OS_TIME cus i dont see any reason why not and someone may want it
+			Script script = new Script(CoreModules.Preset_HardSandbox & CoreModules.OS_Time & CoreModules.Basic); //this makes it way more secure then before. adding OS_TIME cus i dont see any reason why not and someone may want it
 			CodeScript cscript = new CodeScript(ScriptLanguage.Lua);
 			cscript.Script = script;
 			AddData(cscript, ScriptType.Gamemode, ScriptLanguage.Lua, true);
@@ -159,7 +159,7 @@ namespace AmongUsCEDE.Mods
 			{
 				case ScriptLanguage.Lua:
 					Script script = scr.Script as Script;
-					script.Globals["print"] = (Action<string>)Print;
+					//script.Globals["print"] = (Action<string>)Print;
 					script.Globals["CE_WinGame"] = (Action<List<PlayerInfoLua>, string>)VariousScriptFunctions.WinGame;
 					script.Globals["CE_WinGameAlt"] = (Action<string>)VariousScriptFunctions.WinAltGame;
 					script.Globals["CE_MurderPlayer"] = (Action<PlayerInfoLua, PlayerInfoLua, bool>)VariousScriptFunctions.MurderPlayer;
