@@ -124,7 +124,7 @@ namespace AmongUsCEDE.Mods
 		public static bool LoadGamemode(string path, ref Mod ModToAddTo)
 		{
 			string text = "\n" + File.ReadAllText(path);
-			Script script = new Script(CoreModules.Preset_HardSandbox & CoreModules.OS_Time); //this makes it way more secure then before. adding OS_TIME cus i dont see any reason why not and someone may want it
+			Script script = new Script(CoreModules.Preset_HardSandbox & CoreModules.OS_Time & CoreModules.Table); //this makes it way more secure then before. adding OS_TIME cus i dont see any reason why not and someone may want it
 			CodeScript cscript = new CodeScript(ScriptLanguage.Lua);
 			cscript.Script = script;
 			AddData(cscript, ScriptType.Gamemode, ScriptLanguage.Lua, true);

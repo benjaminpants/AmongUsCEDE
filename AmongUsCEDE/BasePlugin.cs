@@ -21,9 +21,10 @@ namespace AmongUsCEDE
 	{
 		None = 0,
 		TextureLoading = 1,
-		CustomColors = 2,
-		CustomHats = 4,
-		LiveModDisables = 8
+		AudioLoading = 2,
+		CustomColors = 4,
+		CustomHats = 8,
+		LiveModDisables = 16
 	}
 
 
@@ -43,7 +44,7 @@ namespace AmongUsCEDE
 
 		public const string CustomDataPrefix = "cede_";
 
-		public const CE_Features features = (CE_Features.CustomHats | CE_Features.LiveModDisables);
+		public const CE_Features features = (CE_Features.CustomHats | CE_Features.LiveModDisables | CE_Features.AudioLoading);
 
 		private void LoadMods()
 		{

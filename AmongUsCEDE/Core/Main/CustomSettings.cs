@@ -24,6 +24,7 @@ namespace AmongUsCEDE.Core.CustomSettings
 		public string display_name = "SUS SETTING";
 		public string addend = "";
 		public float Increment = 1f;
+		public bool Am_Hardcoded = false;
 
 		public object Value;
 

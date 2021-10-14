@@ -68,8 +68,33 @@ function CalculateLightRadius(player,minradius,maxradius,lightsab) --lightsab is
 end
 
 
+local function insert_table_fixed(tab, addend) --work around for broken moonsharp stuff, TODO: fix moonsharp lol
+	tab[#tab + 1] = addend
+end
+
+
 function SelectRoles(players)
-	return {{players[1],players[2],players[3],players[4]},{"impostor","crewmate","crewmate","crewmate"}}
+	
+	local roles_to_select = {}
+	local players_finished = {}
+	for i=1, CE_GetInternalNumberSetting("impostor_count") do
+		insert_table_fixed(roles_to_select,"impostor")
+	end
+	
+	for i=1, #players - #roles_to_select do
+		insert_table_fixed(roles_to_select,"crewmate")
+	end
+	for i=1, #roles_to_select do
+		local id = math.random(1,#players)
+		while players[id] == nil do
+			local id = math.random(1,#players)
+		end
+		insert_table_fixed(players_finished,players[id])
+		players[id] = nil
+	end
+	
+	
+	return {players_selected,roles_to_select}
 end
 
 function CanUsePrimary(user,victim)
@@ -95,9 +120,14 @@ function CheckEndCriteria(tasks_complete, sab_loss)
 		CE_WinGameAlt("stalemate")
 	end
 	
-	
-	if (#impostors >= #crewmates) then
-		CE_WinGame(CE_GetAllPlayersOnTeam(1,false),"default_impostor")
+	if (not CE_GetToggleSetting("end_on_zero_only")) then
+		if (#impostors >= #crewmates) then
+			CE_WinGame(CE_GetAllPlayersOnTeam(1,false),"default_impostor")
+		end
+	else
+		if (#crewmates == 0 and #impostors ~= 0) then
+			CE_WinGame(CE_GetAllPlayersOnTeam(1,false),"default_impostor")
+		end
 	end
 	
 	if (#impostors == 0) then

@@ -19,6 +19,7 @@ using AmongUsCEDE.Core;
 using AmongUsCEDE.Core.Extensions;
 using AmongUsCEDE.Mods;
 using MoonSharp.Interpreter;
+using AmongUsCEDE.Core.CustomSettings;
 
 namespace AmongUsCEDE
 {
@@ -65,6 +66,12 @@ namespace AmongUsCEDE
 		public static bool ModsLoaded = false;
 
 		public static int Colors_Page = 0;
+
+		public static List<Setting> HardcodedSettings = new List<Setting>()
+		{
+			new StringListSetting("intern_gamemode","Gamemode",0,new string[255])
+		};
+		
 
 		public static Role[] AllRoles //TODO: Find out if this is crazy ineffecient or something
 		{
