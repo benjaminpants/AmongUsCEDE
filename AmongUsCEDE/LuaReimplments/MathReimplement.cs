@@ -7,57 +7,106 @@ namespace AmongUsCEDE.LuaReimplments
 {
 	public class MathReimplement
 	{
-		public void abs(ref DynValue number)
+		public DynValue abs(ref DynValue number)
 		{
 			if (number.Type != DataType.Number) throw new InvalidCastException();
-			number = DynValue.NewNumber(Math.Abs(number.Number));
+			return DynValue.NewNumber(Math.Abs(number.Number));
 		}
 
-		public void acos(ref DynValue number)
+		public DynValue acos(ref DynValue number)
 		{
 			if (number.Type != DataType.Number) throw new InvalidCastException();
-			number = DynValue.NewNumber(Math.Acos(number.Number));
+			return DynValue.NewNumber(Math.Acos(number.Number));
 		}
 
-		public void asin(ref DynValue number)
+		public DynValue asin(ref DynValue number)
 		{
 			if (number.Type != DataType.Number) throw new InvalidCastException();
-			number = DynValue.NewNumber(Math.Asin(number.Number));
+			return DynValue.NewNumber(Math.Asin(number.Number));
 		}
 
-		public void atan(ref DynValue number)
+		public DynValue atan(ref DynValue number)
 		{
 			if (number.Type != DataType.Number) throw new InvalidCastException();
-			number = DynValue.NewNumber(Math.Atan(number.Number));
+			return DynValue.NewNumber(Math.Atan(number.Number));
 		}
 
-		public void atan2(ref DynValue number, ref DynValue number2)
+		public DynValue atan2(ref DynValue number, ref DynValue number2)
 		{
 			if (number.Type != DataType.Number || number2.Type != DataType.Number) throw new InvalidCastException();
-			number = DynValue.NewNumber(Math.Atan2(number.Number, number2.Number));
+			return DynValue.NewNumber(Math.Atan2(number.Number, number2.Number));
 		}
 
-		public void ceil(ref DynValue number)
+		public DynValue ceil(ref DynValue number)
 		{
 			if (number.Type != DataType.Number) throw new InvalidCastException();
-			number = DynValue.NewNumber(Math.Ceiling(number.Number));
+			return DynValue.NewNumber(Math.Ceiling(number.Number));
 		}
 
-		public void cos(ref DynValue number)
+		public DynValue cos(ref DynValue number)
 		{
 			if (number.Type != DataType.Number) throw new InvalidCastException();
-			number = DynValue.NewNumber(Math.Cos(number.Number));
+			return DynValue.NewNumber(Math.Cos(number.Number));
 		}
 
-		public void cosh(ref DynValue number)
+		public DynValue cosh(ref DynValue number)
 		{
 			if (number.Type != DataType.Number) throw new InvalidCastException();
-			number = DynValue.NewNumber(Math.Cosh(number.Number));
+			return DynValue.NewNumber(Math.Cosh(number.Number));
 		}
 
-		public void deg(ref DynValue number)
+		public DynValue deg(ref DynValue number)
+		{
+			if (number.Type != DataType.Number) throw new InvalidCastException();
+			return DynValue.NewNumber((180 / Math.PI) * number.Number);
+		}
+
+		public DynValue exp(ref DynValue number)
+		{
+			if (number.Type != DataType.Number) throw new InvalidCastException();
+			return DynValue.NewNumber(Math.Exp(number.Number));
+		}
+
+		public DynValue floor(ref DynValue number)
+		{
+			if (number.Type != DataType.Number) throw new InvalidCastException();
+			return DynValue.NewNumber(Math.Floor(number.Number));
+		}
+
+		public DynValue fmod(ref DynValue number, ref DynValue number2)
 		{
 			throw new NotImplementedException();
 		}
+
+		public DynValue frexp(ref DynValue number)
+		{
+			throw new NotImplementedException();
+		}
+
+		public double huge()
+		{
+			throw new NotImplementedException();
+		}
+
+		public double Idexp(ref DynValue number, ref DynValue number2)
+		{
+			throw new NotImplementedException();
+		}
+
+		public DynValue log(ref DynValue number)
+		{
+			if (number.Type != DataType.Number) throw new InvalidCastException();
+			return DynValue.NewNumber(Math.Log(number.Number));
+		}
+
+		public DynValue log10(ref DynValue number)
+		{
+			if (number.Type != DataType.Number) throw new InvalidCastException();
+			return DynValue.NewNumber(Math.Log10(number.Number));
+		}
+
+
+
+
 	}
 }

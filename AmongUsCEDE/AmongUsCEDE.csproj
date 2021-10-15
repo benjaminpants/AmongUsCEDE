@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <None Remove="Bugfixes\NoAchievementsManager.cs~RF3b33c1d7.TMP" />
+    <None Remove="LuaReimplments\RandomReimplement.cs~RF6f6400a.TMP" />
   </ItemGroup>
 
   <ItemGroup>

@@ -45,6 +45,7 @@ function InitializeGamemode()
 	CE_AddStringSetting("vent_setting","Who Can Vent", 1, {"Impostors Only","Everybody","Nobody"})
 	CE_AddToggleSetting("end_on_zero_only","Game Only ends on 0 Crew", false, {"True","False"})
 
+	print(CE_Random.GetRandom())
 	
 	return {"Base","base"} --Display Name then Internal Name
 end
