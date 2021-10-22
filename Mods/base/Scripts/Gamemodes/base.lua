@@ -72,30 +72,23 @@ end
 
 function SelectRoles(players) --WHAT. THE FUCK. IS GOING ON.
 	
-	local roles_to_select = {}
-	local players_finished = {}
+	local RolesToGive = {}
 	for i=1, CE_GetInternalNumberSetting("impostor_count") do
-		table.insert(roles_to_select,"impostor")
+		table.insert(RolesToGive,"impostor")
 	end
 	print("got past imp")
-	for i=1, #players - #roles_to_select do
-		table.insert(roles_to_select,"crewmate")
+	for i=1, #players - #RolesToGive do
+		table.insert(RolesToGive,"crewmate")
 	end
-	print("got past crew")
-	for i=1, #roles_to_select do
-		local id = math.random(1,#players)
-		print("selected id")
-		while players[id] == nil do
-			print("reselecting id")
-			local id = math.random(1,#players)
-		end
-
-		table.insert(players_finished,players[id])
-		players[id] = nil
+	local Selected = {}
+	local SelectedRoles = {}
+	for i=1, #RolesToGive do
+		local impid = math.random(1,#players) --randomly set the impostor id
+		table.insert(Selected,players[impid]) --add it to the selected list
+		table.insert(SelectedRoles,RolesToGive[i])
+		table.remove(players,impid) --remove the chosen item from the playerinfo list
 	end
-	
-	
-	return {players_selected,roles_to_select}
+	return {Selected,SelectedRoles} -- sets the sheriff's role
 end
 
 function CanUsePrimary(user,victim)
@@ -121,7 +114,7 @@ function CheckEndCriteria(tasks_complete, sab_loss)
 		CE_WinGameAlt("stalemate")
 	end
 	
-	if (not CE_GetToggleSetting("end_on_zero_only")) then
+	if (not CE_GetBoolSetting("end_on_zero_only")) then
 		if (#impostors >= #crewmates) then
 			CE_WinGame(CE_GetAllPlayersOnTeam(1,false),"default_impostor")
 		end

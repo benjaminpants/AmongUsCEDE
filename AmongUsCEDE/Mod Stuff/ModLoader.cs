@@ -131,6 +131,7 @@ namespace AmongUsCEDE.Mods
 			AddEnumToLuaScript(script, "RS_", typeof(RoleSpecials));
 			AddEnumToLuaScript(script, "RV_", typeof(RoleVisibility));
 			AddEnumToLuaScript(script, "VPT_", typeof(PrimaryTarget));
+			AddEnumToLuaScript(script, "ST_", typeof(SystemTypes));
 			script.DoString(text);
 			DynValue vals = script.Call(script.Globals["InitializeGamemode"]);
 			if (vals.Type != DataType.Table) return false;
