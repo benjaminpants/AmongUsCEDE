@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using AmongUsCEDE.Extensions;
+using AmongUsCEDE.Core.Extensions;
 using HarmonyLib;
 
 namespace AmongUsCEDE.Core.Patches
@@ -12,8 +14,7 @@ namespace AmongUsCEDE.Core.Patches
 	{
 		static bool Prefix()
 		{
-			//TODO: finish this
-			return true;
+			return PlayerControl.LocalPlayer.Data.GetRole().CanDo(RoleSpecials.Report,PlayerControl.LocalPlayer.Data);
 		}
 	}
 }
