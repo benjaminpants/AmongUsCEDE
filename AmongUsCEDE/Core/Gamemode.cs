@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using MoonSharp.Interpreter;
 using AmongUsCEDE.Core.CustomSettings;
-using AmongUsCEDE.LuaReimplments;
 
 namespace AmongUsCEDE.Core
 {
@@ -40,7 +39,6 @@ namespace AmongUsCEDE.Core
 	public class CodeHook
 	{
 		public ScriptLanguage Language;
-		public CERandom MyRandom = new CERandom();
 		public object HookObject;
 
 		public CodeHook(ScriptLanguage lang, object hook)
@@ -55,7 +53,6 @@ namespace AmongUsCEDE.Core
 	{
 		public string FileLocation;
 		public ScriptLanguage Language;
-		public CERandom MyRandom = new CERandom();
 		public object Script;
 
 		public CodeScript()
