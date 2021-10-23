@@ -73,6 +73,12 @@ namespace AmongUsCEDE.LuaData
 			private set;
 		}
 
+		public bool InVent
+		{
+			get;
+			private set;
+		}
+
 		public bool IsLocal
 		{
 			get;
@@ -134,6 +140,7 @@ namespace AmongUsCEDE.LuaData
 				PosY = plf.Object.transform.position.y;
 				IsLocal = plf.PlayerId == PlayerControl.LocalPlayer.PlayerId;
 				refplayer = plf;
+				InVent = refplayer.Object.inVent;
 			}
 		}
 	}

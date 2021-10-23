@@ -44,6 +44,7 @@ function InitializeGamemode()
 	
 	CE_AddStringSetting("vent_setting","Who Can Vent", 1, {"Impostors Only","Everybody","Nobody"})
 	CE_AddToggleSetting("end_on_zero_only","Game Only ends on 0 Crew", false, {"True","False"})
+	CE_AddToggleSetting("vent_visibility","Visibility In Vents", true, {"Yes","No"})
 	
 	return {"Base","base"} --Display Name then Internal Name
 end
@@ -53,6 +54,11 @@ local function lerp(a, b, t)
 end
 
 function CalculateLightRadius(player,minradius,maxradius,lightsab) --lightsab is a float ranging from 0-1
+	if (CE_GetBoolSetting("vent_visibility")) then
+		if (player.InVent) then
+			return 0
+		end
+	end
 	local mult = CE_GetInternalNumberSetting("crewmate_vision")
 	if (player.Role == "impostor") then
 		return maxradius * CE_GetInternalNumberSetting("impostor_vision")

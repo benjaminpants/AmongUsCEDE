@@ -9,6 +9,7 @@ using Hazel;
 using PowerTools;
 using UnityEngine;
 using AmongUsCEDE.Core;
+using AmongUsCEDE.Lua;
 
 namespace AmongUsCEDE.RPCs
 {
@@ -55,8 +56,10 @@ namespace AmongUsCEDE.RPCs
 						case HostRequestType.UsePrimary:
 							GameFunctions.SendRequestToHost(__instance,request,reader.ReadByte());
 							break;
+						case HostRequestType.Custom:
+							GameFunctions.SendRequestToHost(__instance, request, reader.ReadDynValue()); //this is incomplete
+							return false;
 						default:
-
 							return false;
 					}
 					return false;

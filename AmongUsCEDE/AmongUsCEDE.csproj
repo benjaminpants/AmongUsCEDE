@@ -3,6 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Lua\Extensions.cs~RF3056766d.TMP" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\Dependencies\0Harmony.dll</HintPath>
