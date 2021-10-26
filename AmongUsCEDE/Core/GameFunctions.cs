@@ -6,6 +6,8 @@ using AmongUsCEDE.LuaData;
 using UnityEngine;
 using System.Linq;
 using Hazel;
+using AmongUsCEDE.Lua;
+using MoonSharp.Interpreter;
 
 namespace AmongUsCEDE.Core
 {
@@ -17,6 +19,7 @@ namespace AmongUsCEDE.Core
 		ChangeHat,
 		ChangeSkin,
 		ChangeColor,
+		ChangePet,
 		Custom
 	}
 
@@ -60,6 +63,9 @@ namespace AmongUsCEDE.Core
 					GameData.PlayerInfo playyes = GameData.Instance.GetPlayerById((byte)data[0]);
 					ScriptManager.RunCurrentGMFunction("OnUsePrimary", false, (PlayerInfoLua)play, (PlayerInfoLua)playyes);
 					break;
+				case HostRequestType.Custom:
+					ScriptManager.RunCurrentGMFunction("OnHostRecieve", false, data);
+					break;
 				default:
 					throw new NotImplementedException("Host Request Type: " + type + " not implemented!");
 			}
@@ -82,6 +88,39 @@ namespace AmongUsCEDE.Core
 			messageWriter.Write(plfo.Data.PlayerId);
 			//messageWriter.EndMessage();
 			AmongUsClient.Instance.FinishRpcImmediately(messageWriter); //send it NOW.
+		}
+
+		public static void SendCustomHostRequestRPC(PlayerControl self, byte id, bool important, List<DynValue> values)
+		{
+
+			if (AmongUsClient.Instance.AmClient)
+			{
+				if (AmongUsClient.Instance.AmHost)
+				{
+					SendRequestToHost(self, HostRequestType.Custom, id,values);
+					return;
+				}
+			}
+			MessageWriter messageWriter = null;
+			if (important)
+			{
+				messageWriter = AmongUsClient.Instance.StartRpcImmediately(self.NetId, 34, SendOption.Reliable, AmongUsClient.Instance.HostId);
+			}
+			else
+			{
+				messageWriter = AmongUsClient.Instance.StartRpc(self.NetId,34,SendOption.Reliable);
+			}
+			messageWriter.Write((byte)HostRequestType.Custom);
+			messageWriter.Write(id);
+			messageWriter.Write(values);
+			if (important)
+			{
+				AmongUsClient.Instance.FinishRpcImmediately(messageWriter); //send it NOW.
+			}
+			else
+			{
+				messageWriter.EndMessage();
+			}
 		}
 
 

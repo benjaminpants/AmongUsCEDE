@@ -43,6 +43,11 @@ namespace AmongUsCEDE.Mods
 			}
 		}
 
+		public static void SendToHost(byte id, bool important, List<DynValue> values)
+		{
+			GameFunctions.SendCustomHostRequestRPC(PlayerControl.LocalPlayer,id, important, values);
+		}
+
 
 		public static void AddIntSetting(string intern_name, string display_name, string suffix, int def, int increment, int min, int max)
 		{

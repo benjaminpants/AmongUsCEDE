@@ -171,6 +171,7 @@ namespace AmongUsCEDE.Mods
 					script.Globals["CE_GetBoolSetting"] = (Func<string, bool>)VariousScriptFunctions.GetToggleSetting;
 					script.Globals["CE_GetInternalNumberSetting"] = (Func<string, float>)VariousScriptFunctions.GetInternalNumberSetting;
 					script.Globals["CE_AmHost"] = (Func<bool>)VariousScriptFunctions.AmHost;
+					script.Globals["CE_SendToHost"] = (Action<byte,bool,List<DynValue>>)VariousScriptFunctions.SendToHost;
 					if (includeinit)
 					{
 						script.Globals["CE_AddRole"] = (Action<Table>)VariousScriptFunctions.AddRole;

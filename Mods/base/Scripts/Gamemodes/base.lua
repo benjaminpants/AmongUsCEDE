@@ -145,6 +145,12 @@ function CheckEndCriteria(tasks_complete, sab_loss)
 end
 
 
+function OnHostRecieve(sender,id,params)
+	
+
+end
+
+
 function OnUsePrimary(user,victim) --attention all gamers, feel free to call CanUsePrimary here, also this is ran on the host
 	if (not CanUsePrimary(user,victim)) then
 		return

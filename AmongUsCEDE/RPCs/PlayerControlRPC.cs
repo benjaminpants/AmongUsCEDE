@@ -10,6 +10,7 @@ using PowerTools;
 using UnityEngine;
 using AmongUsCEDE.Core;
 using AmongUsCEDE.Lua;
+using AmongUsCEDE.LuaData;
 
 namespace AmongUsCEDE.RPCs
 {
@@ -57,7 +58,7 @@ namespace AmongUsCEDE.RPCs
 							GameFunctions.SendRequestToHost(__instance,request,reader.ReadByte());
 							break;
 						case HostRequestType.Custom:
-							GameFunctions.SendRequestToHost(__instance, request, reader.ReadDynValue()); //this is incomplete
+							GameFunctions.SendRequestToHost(__instance, request, (PlayerInfoLua)__instance, reader.ReadByte(), reader.ReadDynValueList().ToArray()); //this is complete
 							return false;
 						default:
 							return false;

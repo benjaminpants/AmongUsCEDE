@@ -52,6 +52,27 @@ namespace AmongUsCEDE.Lua
 			}
 		}
 
+		public static void Write(this MessageWriter me, List<DynValue> values)
+		{
+			if (values.Count >= 256) throw new CriticalClientException("Attempting to serialize values greater then 255!");
+			me.Write((byte)values.Count);
+			for (int i = 0; i < values.Count; i++)
+			{
+				me.Write(values[i]);
+			}
+		}
+
+		public static List<DynValue> ReadDynValueList(this MessageReader me)
+		{
+			List<DynValue> values = new List<DynValue>();
+			byte length = me.ReadByte();
+			for (int i = 0; i < length; i++)
+			{
+				values.Add(me.ReadDynValue());
+			}
+			return values;
+		}
+
 		public static DynValue ReadDynValue(this MessageReader me)
 		{
 			DataType type = (DataType)me.ReadByte();
