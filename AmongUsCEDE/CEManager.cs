@@ -24,7 +24,7 @@ using AmongUsCEDE.Core.CustomSettings;
 namespace AmongUsCEDE
 {
 
-	public enum LuaComplete //i literally created all of these enums for nothing atm
+	public enum LuaComplete //i literally created all of these enums for nothing
 	{
 		Success, //The LUA script ran succesfully
 		Crash, //Both the LUA script and the base LUA script crashed.
@@ -89,6 +89,19 @@ namespace AmongUsCEDE
 					}
 				}
 				return Roles.ToArray();
+			}
+		}
+
+		public static int GlobalGamemodeCount
+		{
+			get
+			{
+				int gamemodes = 0;
+				for (int i = 0; i < ModLoader.Mods.Count; i++)
+				{
+					gamemodes += ModLoader.Mods[i].Gamemodes.Count;
+				}
+				return gamemodes;
 			}
 		}
 	

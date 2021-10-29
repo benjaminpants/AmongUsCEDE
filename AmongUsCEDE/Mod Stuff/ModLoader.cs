@@ -101,6 +101,18 @@ namespace AmongUsCEDE.Mods
 			}
 
 			CEManager.ModsLoaded = true;
+			StringListSetting gamemodesetting = (StringListSetting)CEManager.HardcodedSettings[0];
+			gamemodesetting.Max = (int)CEManager.GlobalGamemodeCount;
+			int k = 0;
+			for (int i = 0; i < ModLoader.Mods.Count; i++)
+			{
+				for (int j = 0; j < ModLoader.Mods[i].Gamemodes.Count; j++)
+				{
+					gamemodesetting.Strings[k] = ModLoader.Mods[i].Gamemodes[j].DisplayName;
+					k++;
+				}
+			}
+
 			return true;
 		}
 

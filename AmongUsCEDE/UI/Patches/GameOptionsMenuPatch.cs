@@ -19,6 +19,7 @@ namespace AmongUsCEDE.UI.Patches
 		[HarmonyPatch("Start")]
 		class GameOptionsMenuPatch
 		{
+			const float start_y = -8.35f;
 			static bool Prefix(GameOptionsMenu __instance)
 			{
 				var numberoption = GameObject.FindObjectsOfType<NumberOption>().FirstOrDefault();
@@ -27,54 +28,16 @@ namespace AmongUsCEDE.UI.Patches
 
 				var stringoption = GameObject.FindObjectsOfType<StringOption>().FirstOrDefault();
 
-				float start_y = -8.35f;
+				for (int i = 0; i < CEManager.HardcodedSettings.Count; i++)
+				{
+					Setting setting = CEManager.HardcodedSettings[i];
+					AddSetting(setting, i, numberoption, toggleoption, stringoption);
+				}
 
 				for (int i = 0; i < ScriptManager.CurrentGamemode.Settings.Count; i++)
 				{
 					Setting setting = ScriptManager.CurrentGamemode.Settings[i];
-					if (setting.settingtype == SettingType.Float || setting.settingtype == SettingType.Int)
-					{
-						NumberOption opt = GameObject.Instantiate<NumberOption>(numberoption, numberoption.transform.parent);
-						opt.transform.localPosition = new Vector3(opt.transform.localPosition.x, start_y - (0.5f * i), opt.transform.localPosition.z);
-						opt.Title = (StringNames)i; //clever yet stupid way of checking what setting it is
-						opt.TitleText.text = setting.display_name;
-						if (setting.settingtype == SettingType.Int)
-						{
-							opt.ValidRange = new FloatRange((int)setting.Min, (int)setting.Max);
-							opt.Value = (int)setting.Value;
-						}
-						else
-						{
-							opt.ValidRange = new FloatRange((float)setting.Min, (float)setting.Max);
-							opt.Value = (float)setting.Value;
-						}
-						opt.Increment = setting.Increment;
-						opt.ValueText.text = opt.Value.ToString();
-						opt.oldValue = opt.Value;
-						opt.ZeroIsInfinity = false;
-						opt.FormatString = (setting.settingtype == SettingType.Int ? "0" : "0.0");
-						opt.SuffixType = (setting.addend == "x" ? NumberSuffixes.Multiplier : setting.addend == "s" ? NumberSuffixes.Seconds : NumberSuffixes.None);
-						opt.OnValueChanged = (Action<OptionBehaviour>)GameOptionsExtension.UpdateSetting;
-					}
-					else if (setting.settingtype == SettingType.Toggle)
-					{
-						ToggleOption opt = GameObject.Instantiate<ToggleOption>(toggleoption, toggleoption.transform.parent);
-						opt.transform.localPosition = new Vector3(opt.transform.localPosition.x, start_y - (0.5f * i), opt.transform.localPosition.z);
-						opt.Title = (StringNames)i; //clever yet stupid way of checking what setting it is
-						opt.TitleText.text = setting.display_name;
-						opt.CheckMark.enabled = (bool)setting.Value;
-						opt.OnValueChanged = (Action<OptionBehaviour>)GameOptionsExtension.UpdateSetting;
-					}
-					else if (setting.settingtype == SettingType.StringList)
-					{
-						StringOption opt = GameObject.Instantiate<StringOption>(stringoption, toggleoption.transform.parent);
-						opt.transform.localPosition = new Vector3(opt.transform.localPosition.x, start_y - (0.5f * i), opt.transform.localPosition.z);
-						opt.Title = (StringNames)i; //clever yet stupid way of checking what setting it is
-						opt.TitleText.text = setting.display_name;
-						opt.ValueText.text = (setting as StringListSetting).Strings[(byte)setting.Value];
-						opt.Value = (byte)setting.Value;
-						opt.OnValueChanged = (Action<OptionBehaviour>)GameOptionsExtension.UpdateSetting;
-					}
+					AddSetting(setting, CEManager.HardcodedSettings.Count + i, numberoption,toggleoption,stringoption);
 				}
 
 
@@ -85,7 +48,7 @@ namespace AmongUsCEDE.UI.Patches
 				for (int i = 0; i < __instance.Children.Length; i++)
 				{
 					OptionBehaviour optionBehaviour = __instance.Children[i];
-					if ((int)optionBehaviour.Title > AmongUsCEDE.MaxSettingAmount)
+					if (((int)optionBehaviour.Title > AmongUsCEDE.MaxSettingAmount) && ((int)optionBehaviour.Title < AmongUsCEDE.HardcodedSettingStringOverrideStart))
 					{
 						optionBehaviour.OnValueChanged = new Action<OptionBehaviour>(__instance.ValueChanged);
 					}
@@ -99,6 +62,55 @@ namespace AmongUsCEDE.UI.Patches
 
 
 			}
+
+
+			static void AddSetting(Setting setting, int i, NumberOption numberoption, ToggleOption toggleoption, StringOption stringoption)
+			{
+				if (setting.settingtype == SettingType.Float || setting.settingtype == SettingType.Int)
+				{
+					NumberOption opt = GameObject.Instantiate<NumberOption>(numberoption, numberoption.transform.parent);
+					opt.transform.localPosition = new Vector3(opt.transform.localPosition.x, start_y - (0.5f * i), opt.transform.localPosition.z);
+					opt.Title = (StringNames)i; //clever yet stupid way of checking what setting it is
+					opt.TitleText.text = setting.display_name;
+					if (setting.settingtype == SettingType.Int)
+					{
+						opt.ValidRange = new FloatRange((int)setting.Min, (int)setting.Max);
+						opt.Value = (int)setting.Value;
+					}
+					else
+					{
+						opt.ValidRange = new FloatRange((float)setting.Min, (float)setting.Max);
+						opt.Value = (float)setting.Value;
+					}
+					opt.Increment = setting.Increment;
+					opt.ValueText.text = opt.Value.ToString();
+					opt.oldValue = opt.Value;
+					opt.ZeroIsInfinity = false;
+					opt.FormatString = (setting.settingtype == SettingType.Int ? "0" : "0.0");
+					opt.SuffixType = (setting.addend == "x" ? NumberSuffixes.Multiplier : setting.addend == "s" ? NumberSuffixes.Seconds : NumberSuffixes.None);
+					opt.OnValueChanged = (Action<OptionBehaviour>)GameOptionsExtension.UpdateSetting;
+				}
+				else if (setting.settingtype == SettingType.Toggle)
+				{
+					ToggleOption opt = GameObject.Instantiate<ToggleOption>(toggleoption, toggleoption.transform.parent);
+					opt.transform.localPosition = new Vector3(opt.transform.localPosition.x, start_y - (0.5f * i), opt.transform.localPosition.z);
+					opt.Title = (StringNames)i; //clever yet stupid way of checking what setting it is
+					opt.TitleText.text = setting.display_name;
+					opt.CheckMark.enabled = (bool)setting.Value;
+					opt.OnValueChanged = (Action<OptionBehaviour>)GameOptionsExtension.UpdateSetting;
+				}
+				else if (setting.settingtype == SettingType.StringList)
+				{
+					StringOption opt = GameObject.Instantiate<StringOption>(stringoption, toggleoption.transform.parent);
+					opt.transform.localPosition = new Vector3(opt.transform.localPosition.x, start_y - (0.5f * i), opt.transform.localPosition.z);
+					opt.Title = (StringNames)i; //clever yet stupid way of checking what setting it is
+					opt.TitleText.text = setting.display_name;
+					opt.ValueText.text = (setting as StringListSetting).Strings[(byte)setting.Value];
+					opt.Value = (byte)setting.Value;
+					opt.OnValueChanged = (Action<OptionBehaviour>)GameOptionsExtension.UpdateSetting;
+				}
+			}
+
 
 		}
 

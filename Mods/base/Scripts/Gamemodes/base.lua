@@ -1,5 +1,4 @@
 function InitializeGamemode()
-	print("ayo is the custom print function working")
 	CE_AddRole({
 		internal_name = "crewmate",
 		name = "Crewmate",

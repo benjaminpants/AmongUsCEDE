@@ -87,6 +87,15 @@ namespace AmongUsCEDE.UI.Patches
 					}
 					return false;
 				}
+				if ((int)__instance.Title >= AmongUsCEDE.HardcodedSettingStringOverrideStart)
+				{
+					if (__instance.oldValue != __instance.Value)
+					{
+						__instance.oldValue = __instance.Value;
+						__instance.ValueText.text = (CEManager.HardcodedSettings[(int)__instance.Title] as StringListSetting).Strings[__instance.Value];
+					}
+					return false;
+				}
 				return true;
 			}
 		}
