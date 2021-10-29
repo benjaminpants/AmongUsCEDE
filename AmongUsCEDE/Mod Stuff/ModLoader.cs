@@ -106,8 +106,10 @@ namespace AmongUsCEDE.Mods
 			int k = 0;
 			for (int i = 0; i < ModLoader.Mods.Count; i++)
 			{
+				if (ModLoader.Mods[i].Enabled == false) continue;
 				for (int j = 0; j < ModLoader.Mods[i].Gamemodes.Count; j++)
 				{
+					
 					gamemodesetting.Strings[k] = ModLoader.Mods[i].Gamemodes[j].DisplayName;
 					k++;
 				}
