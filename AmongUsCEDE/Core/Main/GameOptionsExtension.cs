@@ -8,7 +8,17 @@ namespace AmongUsCEDE.Core
 {
 	public static class GameOptionsExtension
 	{
-		public static int Gamemode = 0;
+		public static byte Gamemode
+		{
+			get
+			{
+				return (byte)CEManager.HardcodedSettings[0].Value;
+			}
+			set
+			{
+				CEManager.HardcodedSettings[0].Value = value;
+			}
+		}
 
 
 		public static void WriteGameOptionsRPC(PlayerControl player, GameOptionsData gameOptions)
@@ -21,7 +31,10 @@ namespace AmongUsCEDE.Core
 			SaveManager.GameHostOptions = gameOptions;
 			MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(player.NetId, 2, SendOption.Reliable);
 			messageWriter.WriteBytesAndSize(gameOptions.ToBytes(4));
-			messageWriter.Write(Gamemode);
+			for (int i = 0; i < CEManager.HardcodedSettings.Count; i++)
+			{
+				CEManager.HardcodedSettings[i].Serialize(ref messageWriter);
+			}
 			for (int i = 0; i < ScriptManager.CurrentGamemode.Settings.Count; i++)
 			{
 				ScriptManager.CurrentGamemode.Settings[i].Serialize(ref messageWriter);
@@ -31,7 +44,7 @@ namespace AmongUsCEDE.Core
 
 		public static void Deserialize(MessageReader reader)
 		{
-			GameOptionsExtension.Gamemode = reader.ReadInt32();
+			GameOptionsExtension.Gamemode = reader.ReadByte();
 			for (int i = 0; i < ScriptManager.CurrentGamemode.Settings.Count; i++)
 			{
 				switch (ScriptManager.CurrentGamemode.Settings[i].settingtype)
@@ -59,7 +72,15 @@ namespace AmongUsCEDE.Core
 
 		public static void UpdateSetting(OptionBehaviour behav)
 		{
-			Setting customsetting = ScriptManager.CurrentGamemode.Settings[(int)behav.Title];
+			Setting customsetting = null;
+			if (((int)behav.Title) >= AmongUsCEDE.HardcodedSettingStringOverrideStart)
+			{
+				customsetting = CEManager.HardcodedSettings[(int)behav.Title - AmongUsCEDE.HardcodedSettingStringOverrideStart];
+			}
+			else
+			{
+				customsetting = ScriptManager.CurrentGamemode.Settings[(int)behav.Title];
+			}
 			switch (customsetting.settingtype)
 			{
 				case SettingType.Float:

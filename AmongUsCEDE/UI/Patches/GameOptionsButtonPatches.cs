@@ -78,12 +78,16 @@ namespace AmongUsCEDE.UI.Patches
 		{
 			static bool Prefix(StringOption __instance)
 			{
+				if (__instance == null) return false;
 				if ((int)__instance.Title <= AmongUsCEDE.MaxSettingAmount)
 				{
 					if (__instance.oldValue != __instance.Value)
 					{
+						DebugLog.ShowMessage("custom:" + (int)__instance.Title);
 						__instance.oldValue = __instance.Value;
+						DebugLog.ShowMessage("custom post old" + (__instance.ValueText == null));
 						__instance.ValueText.text = (ScriptManager.CurrentGamemode.Settings[(int)__instance.Title] as StringListSetting).Strings[__instance.Value];
+						DebugLog.ShowMessage("custom post set");
 					}
 					return false;
 				}
@@ -91,8 +95,9 @@ namespace AmongUsCEDE.UI.Patches
 				{
 					if (__instance.oldValue != __instance.Value)
 					{
+						DebugLog.ShowMessage("hardcoded:" + (int)__instance.Title);
 						__instance.oldValue = __instance.Value;
-						__instance.ValueText.text = (CEManager.HardcodedSettings[(int)__instance.Title] as StringListSetting).Strings[__instance.Value];
+						__instance.ValueText.text = (CEManager.HardcodedSettings[(int)__instance.Title - AmongUsCEDE.HardcodedSettingStringOverrideStart] as StringListSetting).Strings[__instance.Value];
 					}
 					return false;
 				}

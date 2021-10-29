@@ -102,7 +102,7 @@ namespace AmongUsCEDE.Mods
 
 			CEManager.ModsLoaded = true;
 			StringListSetting gamemodesetting = (StringListSetting)CEManager.HardcodedSettings[0];
-			gamemodesetting.Max = (int)CEManager.GlobalGamemodeCount;
+			gamemodesetting.Max = (int)CEManager.GlobalGamemodeCount - 1;
 			int k = 0;
 			for (int i = 0; i < ModLoader.Mods.Count; i++)
 			{
