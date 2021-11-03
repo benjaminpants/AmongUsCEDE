@@ -185,10 +185,10 @@ namespace AmongUsCEDE.Mods
 					script.Globals["CE_GetBoolSetting"] = (Func<string, bool>)VariousScriptFunctions.GetToggleSetting;
 					script.Globals["CE_GetInternalNumberSetting"] = (Func<string, float>)VariousScriptFunctions.GetInternalNumberSetting;
 					script.Globals["CE_AmHost"] = (Func<bool>)VariousScriptFunctions.AmHost;
-					script.Globals["CE_SendToHost"] = (Action<byte,bool,List<DynValue>>)VariousScriptFunctions.SendToHost;
+					script.Globals["CE_SendToHost"] = (Action<byte,bool,List<DynValue>>)VariousScriptFunctions.SendToHost; //TODO: Make this not rely on DynValues
 					if (includeinit)
 					{
-						script.Globals["CE_AddRole"] = (Action<Table>)VariousScriptFunctions.AddRole;
+						script.Globals["CE_AddRole"] = (Action<Table>)VariousScriptFunctions.AddRoleLua;
 						script.Globals["CE_AddIntSetting"] = (Action<string, string, string, int, int, int, int>)VariousScriptFunctions.AddIntSetting;
 						script.Globals["CE_AddFloatSetting"] = (Action<string, string, string, float, float, float, float>)VariousScriptFunctions.AddFloatSetting;
 						script.Globals["CE_AddToggleSetting"] = (Action<string, string, bool, string[]>)VariousScriptFunctions.AddToggleSetting;

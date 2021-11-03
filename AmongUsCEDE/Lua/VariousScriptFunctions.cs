@@ -133,7 +133,7 @@ namespace AmongUsCEDE.Mods
 			ModLoader.TempHooks.Add(hook,new CodeHook(ScriptLanguage.Lua,function));
 		}
 
-		public static void AddRole(Table parms)
+		public static void AddRoleLua(Table parms)
 		{
 			Role role = new Role(parms.Get("internal_name").String, parms.Get("name").String);
 			role.Reveal_Text = parms.Get("role_text").String;
