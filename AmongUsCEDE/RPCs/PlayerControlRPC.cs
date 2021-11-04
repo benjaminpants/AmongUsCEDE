@@ -41,6 +41,20 @@ namespace AmongUsCEDE.RPCs
 					{
 						if (DoAnimation)
 						{
+							if (PlayerControl.LocalPlayer == user)
+							{
+								if (Minigame.Instance)
+								{
+									try
+									{
+										Minigame.Instance.Close();
+										Minigame.Instance.Close();
+									}
+									catch
+									{
+									}
+								}
+							}
 							user.MurderPlayer(target);
 						}
 						else
