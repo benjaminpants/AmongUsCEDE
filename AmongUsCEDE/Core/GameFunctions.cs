@@ -289,6 +289,7 @@ namespace AmongUsCEDE.Core
 
 		public static void WriteVictory(List<GameData.PlayerInfo> players, string sound, VictoryTypes type)
 		{
+			if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Ended) return;
 			MessageWriter messageWriter = AmongUsClient.Instance.StartEndGame();
 			messageWriter.Write((byte)type);
 			messageWriter.Write((byte)players.Count);

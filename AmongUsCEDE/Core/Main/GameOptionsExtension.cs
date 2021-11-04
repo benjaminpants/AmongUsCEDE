@@ -76,6 +76,10 @@ namespace AmongUsCEDE.Core
 			if (((int)behav.Title) >= AmongUsCEDE.HardcodedSettingStringOverrideStart)
 			{
 				customsetting = CEManager.HardcodedSettings[(int)behav.Title - AmongUsCEDE.HardcodedSettingStringOverrideStart];
+				if (customsetting.internal_name == "intern_gamemode" && CustomPlayerMenu.Instance && AmongUsClient.Instance.AmHost)
+				{
+					CustomPlayerMenu.Instance.Close(true);
+				}
 			}
 			else
 			{
