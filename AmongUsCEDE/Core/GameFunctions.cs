@@ -182,6 +182,7 @@ namespace AmongUsCEDE.Core
 			DestroyableSingleton<HudManager>.Instance.MapButton.gameObject.SetActive(true);
 			DestroyableSingleton<HudManager>.Instance.ReportButton.gameObject.SetActive(myrole.CanDo(RoleSpecials.Report,data));
 			DestroyableSingleton<HudManager>.Instance.UseButton.gameObject.SetActive(true);
+			DestroyableSingleton<HudManager>.Instance.KillButton.gameObject.SetActive(myrole.CanDo(RoleSpecials.Primary, data));
 			PlayerControl.LocalPlayer.RemainingEmergencies = PlayerControl.GameOptions.NumEmergencyMeetings;
 			if (myrole.CanDo(RoleSpecials.Primary, data))
 			{
@@ -218,9 +219,10 @@ namespace AmongUsCEDE.Core
 				{
 					listfixed.Add(playerlist[i]);
 				}
+				byte layer = PlayerControl.LocalPlayer.Data.GetRole().Layer;
 				yourTeam = (from pcd in listfixed
 							where !pcd.Disconnected
-							where (pcd.GetRole().Layer == PlayerControl.LocalPlayer.Data.GetRole().Layer) || PlayerControl.LocalPlayer.Data.GetRole().Layer == 255
+							where ((pcd.GetRole().Layer == layer) || layer == 255) && (layer != 0)
 							select pcd.Object).OrderBy(delegate (PlayerControl pc)
 							{
 								if (!(pc == PlayerControl.LocalPlayer))
@@ -229,6 +231,11 @@ namespace AmongUsCEDE.Core
 								}
 								return 0;
 							}).ToList<PlayerControl>();
+
+				if (layer == 0)
+				{
+					yourTeam.Add(PlayerControl.LocalPlayer);
+				}
 
 				self.StopAllCoroutines();
 

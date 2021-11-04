@@ -69,7 +69,7 @@ namespace AmongUsCEDE
 
 		public static List<Setting> HardcodedSettings = new List<Setting>()
 		{
-			new StringListSetting("intern_gamemode","Gamemode",0,new string[255])
+			new StringListSetting("intern_gamemode","Gamemode",0,new string[255],1)
 		};
 		
 

@@ -5,7 +5,7 @@ function InitializeGamemode()
 		role_text = "There are impostors Among Us.",
 		specials = {RS_Report},
 		has_tasks = true,
-		layer = 255, --special layer that shows everyone regardless of layer
+		layer = 1, --special layer that shows everyone regardless of layer
 		team = 0,
 		role_vis = RV_None,
 		color = {r=140,g=255,b=255},
@@ -20,7 +20,7 @@ function InitializeGamemode()
 		specials = {RS_Primary,RS_Sabotage,RS_Vent,RS_Report},
 		has_tasks = false,
 		role_vis = RV_SameLayer,
-		layer = 0,
+		layer = 1,
 		team = 1,
 		primary_valid_targets = VPT_Others,
 		immune_to_light_affectors = true,
@@ -53,7 +53,7 @@ local function lerp(a, b, t)
 end
 
 function CalculateLightRadius(player,minradius,maxradius,lightsab) --lightsab is a float ranging from 0-1
-	if (CE_GetBoolSetting("vent_visibility")) then
+	if (not CE_GetBoolSetting("vent_visibility")) then
 		if (player.InVent) then
 			return 0
 		end
@@ -114,6 +114,10 @@ end
 function CheckEndCriteria(tasks_complete, sab_loss)
 	local impostors = CE_GetAllPlayersOnTeam(1,true)
 	local crewmates = CE_GetAllPlayersOnTeam(0,true)
+	
+	if (sab_loss) then
+		CE_WinGame(CE_GetAllPlayersOnTeam(1,false),"default_impostor")
+	end
 	
 	if (#crewmates == 0 and #impostors == 0) then
 		CE_WinGameAlt("stalemate")

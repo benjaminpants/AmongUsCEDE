@@ -121,6 +121,19 @@ namespace AmongUsCEDE.Core.CustomSettings
 			Strings = stringz;
 		}
 
+		public StringListSetting(string internl, string externl, byte defaul, string[] stringz, int length)
+		{
+			internal_name = internl;
+			display_name = externl;
+			settingtype = SettingType.StringList;
+			Value = defaul;
+			Default = defaul;
+			Increment = 1f;
+			Min = 0;
+			Max = length;
+			Strings = stringz;
+		}
+
 		public override string ToString()
 		{
 			return display_name + ": " + Strings[((byte)Value)];

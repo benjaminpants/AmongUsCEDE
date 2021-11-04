@@ -37,7 +37,7 @@ namespace AmongUsCEDE.UI.Patches
 				for (int i = 0; i < ScriptManager.CurrentGamemode.Settings.Count; i++)
 				{
 					Setting setting = ScriptManager.CurrentGamemode.Settings[i];
-					AddSetting(setting, CEManager.HardcodedSettings.Count + i, 0, numberoption,toggleoption,stringoption);
+					AddSetting(setting, CEManager.HardcodedSettings.Count + i, -CEManager.HardcodedSettings.Count, numberoption,toggleoption,stringoption);
 				}
 
 
@@ -107,6 +107,7 @@ namespace AmongUsCEDE.UI.Patches
 					opt.TitleText.text = setting.display_name;
 					opt.ValueText.text = (setting as StringListSetting).Strings[(byte)setting.Value];
 					opt.Value = (byte)setting.Value;
+					opt.Values = new StringNames[(int)setting.Max + 1];
 					opt.OnValueChanged = (Action<OptionBehaviour>)GameOptionsExtension.UpdateSetting;
 				}
 			}
