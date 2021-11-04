@@ -51,7 +51,7 @@ namespace AmongUsCEDE.Utilities
 					{
 						foreach (string path in Directory.GetFiles(Path.Combine(TexturesPath, "AutoCache")))
 						{
-							DebugLog.ShowMessage("caching:" + new FileInfo(path).Name);
+							UnityEngine.Debug.Log("caching:" + new FileInfo(path).Name);
 							GetTexture(new FileInfo(path).Name,path,true); //caches the texture
 						}
 					}

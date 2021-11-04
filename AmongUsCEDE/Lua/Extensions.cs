@@ -95,7 +95,7 @@ namespace AmongUsCEDE.Lua
 					}
 					return DynValue.NewNil();
 				case DataType.Table: //TODO: Figure out if theres a way to create a Table without a Script reference.
-					DebugLog.ShowMessage("Table Reading not implemented!");
+					UnityEngine.Debug.Log("Table Reading not implemented!");
 					return DynValue.NewNil();
 				default:
 					return DynValue.NewNil();

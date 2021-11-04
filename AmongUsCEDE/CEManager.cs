@@ -117,7 +117,7 @@ namespace AmongUsCEDE
 			{
 				if (GameOptionsExtension.Gamemode >= ModLoader.Mods[0].Gamemodes.Count)
 				{
-					DebugLog.ShowMessage("gamemode out of range! " + GameOptionsExtension.Gamemode);
+					UnityEngine.Debug.Log("gamemode out of range! " + GameOptionsExtension.Gamemode);
 					return ModLoader.Mods[0].Gamemodes[0];
 				}
 				return ModLoader.Mods[0].Gamemodes[GameOptionsExtension.Gamemode];
@@ -148,7 +148,7 @@ namespace AmongUsCEDE
 				}
 				catch (ScriptRuntimeException E)
 				{
-					DebugLog.ShowMessage("Caught Hook Error(" + hook + "):" + E.DecoratedMessage);
+					UnityEngine.Debug.Log("Caught Hook Error(" + hook + "):" + E.DecoratedMessage);
 					return null;
 				}
 			}

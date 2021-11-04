@@ -174,7 +174,7 @@ namespace AmongUsCEDE.Core
 				if (playerById != null)
 				{
 					playerById.GetExtension().Role = roles[i];
-					DebugLog.ShowMessage(playerById.GetExtension().Role.ToString());
+					UnityEngine.Debug.Log(playerById.GetExtension().Role.ToString());
 				}
 			}
 			GameData.PlayerInfo data = PlayerControl.LocalPlayer.Data;
@@ -195,7 +195,7 @@ namespace AmongUsCEDE.Core
 				importantTextTask.transform.SetParent(PlayerControl.LocalPlayer.transform, false);
 				importantTextTask.Text = myrole.FakeTaskString + "\r\n<color=#FFFFFFFF>" + "Fake Tasks:" + "</color>"; //ben: you were figuring out il2cpp array bullshit
 				self.myTasks.Insert(0, importantTextTask);
-				DebugLog.ShowMessage("yes" + importantTextTask.ToString());
+				UnityEngine.Debug.Log("yes" + importantTextTask.ToString());
 			}
 
 			for (int j = 0; j < players.Length; j++)

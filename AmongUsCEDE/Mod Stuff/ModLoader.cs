@@ -165,7 +165,7 @@ namespace AmongUsCEDE.Mods
 
 		private static void Print(string text)
 		{
-			DebugLog.ShowMessage("Lua:" + text);
+			UnityEngine.Debug.Log("Lua:" + text);
 		}
 
 		private static void AddData(CodeScript scr, ScriptType type, ScriptLanguage lang, bool includeinit) //made this not stupid :sunglasses:
