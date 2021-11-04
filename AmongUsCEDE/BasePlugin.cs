@@ -8,7 +8,6 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using MoonSharp.Interpreter;
 using UnityEngine.SceneManagement;
-using Consensus; //allows patching for ienumerators
 using AmongUsCEDE.Mods;
 using AmongUsCEDE.Core.Extensions;
 using AmongUsCEDE.Utilities;
@@ -68,7 +67,6 @@ namespace AmongUsCEDE
 
 		public override void Load()
 		{
-			ConsensusPatcher.Patch(Harmony);
 			UserData.RegisterAssembly();
 			SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((scene, loadscenemode) =>
 			{

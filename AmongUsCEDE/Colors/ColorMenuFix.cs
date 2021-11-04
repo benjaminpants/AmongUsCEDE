@@ -96,7 +96,7 @@ namespace AmongUsCEDE.Colors
 				ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab);
 				colorChip.transform.SetParent(__instance.ColorTabArea);
 				colorChip.transform.localPosition = new Vector3(x, y, -1f);
-				DebugLog.ShowMessage("creating color:" + i);
+				UnityEngine.Debug.Log("creating color:" + i);
 				int j = i;
 				colorChip.Button.OnClick.AddListener((Action)delegate
 				{

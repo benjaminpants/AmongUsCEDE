@@ -26,9 +26,6 @@
     <Reference Include="BepInEx.Preloader.Core">
       <HintPath>..\Dependencies\BepInEx.Preloader.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Consensus">
-      <HintPath>..\Dependencies\Consensus.dll</HintPath>
-    </Reference>
     <Reference Include="Hazel">
       <HintPath>..\Dependencies\Hazel.dll</HintPath>
     </Reference>
