@@ -29,7 +29,7 @@ namespace AmongUsCEDE
 
 
 
-	[BepInPlugin("mtm101.rulerp.moogus.amongusce")]
+	[BepInPlugin("mtm101.rulerp.moogus.amongusce","Among Us: CEDE","0.0.0.0")]
 	[BepInProcess("Among Us.exe")]
 	public class AmongUsCEDE : BasePlugin
 	{
@@ -68,6 +68,7 @@ namespace AmongUsCEDE
 		public override void Load()
 		{
 			UserData.RegisterAssembly();
+			IL2CPPChainloader.AddUnityComponent<ImportantTextTask>();
 			SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((scene, loadscenemode) =>
 			{
 				if (scene.name == "SplashIntro")

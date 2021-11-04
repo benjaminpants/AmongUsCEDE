@@ -183,21 +183,13 @@ namespace AmongUsCEDE.Core
 			DestroyableSingleton<HudManager>.Instance.MapButton.gameObject.SetActive(true);
 			DestroyableSingleton<HudManager>.Instance.ReportButton.gameObject.SetActive(myrole.CanDo(RoleSpecials.Report,data));
 			DestroyableSingleton<HudManager>.Instance.UseButton.gameObject.SetActive(true);
-			DestroyableSingleton<HudManager>.Instance.KillButton.gameObject.SetActive(myrole.CanDo(RoleSpecials.Primary, data));
 			PlayerControl.LocalPlayer.RemainingEmergencies = PlayerControl.GameOptions.NumEmergencyMeetings;
 			if (myrole.CanDo(RoleSpecials.Primary, data))
 			{
 				DestroyableSingleton<HudManager>.Instance.KillButton.gameObject.SetActive(true);
 				PlayerControl.LocalPlayer.SetKillTimer(10f);
 			}
-			if (!myrole.HasTasks)
-			{
-				ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
-				importantTextTask.transform.SetParent(PlayerControl.LocalPlayer.transform, false);
-				importantTextTask.Text = myrole.FakeTaskString + "\r\n<color=#FFFFFFFF>" + "Fake Tasks:" + "</color>"; //ben: you were figuring out il2cpp array bullshit
-				self.myTasks.Insert(0, importantTextTask);
-				UnityEngine.Debug.Log("yes" + importantTextTask.ToString());
-			}
+			HudManager.Instance.SetHudActive(true);
 
 			for (int j = 0; j < players.Length; j++)
 			{
@@ -251,6 +243,7 @@ namespace AmongUsCEDE.Core
 				{
 					DestroyableSingleton<HudManager>.Instance.StartCoroutine(DestroyableSingleton<HudManager>.Instance.CoShowIntro(yourteamreal));
 				}
+
 			}
 		}
 

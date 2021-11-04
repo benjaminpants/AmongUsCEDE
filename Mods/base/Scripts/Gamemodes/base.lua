@@ -5,7 +5,7 @@ function InitializeGamemode()
 		role_text = "There are impostors Among Us.",
 		specials = {RS_Report},
 		has_tasks = true,
-		layer = 1, --special layer that shows everyone regardless of layer
+		layer = 255, --special layer that shows everyone regardless of layer
 		team = 0,
 		role_vis = RV_None,
 		color = {r=140,g=255,b=255},
