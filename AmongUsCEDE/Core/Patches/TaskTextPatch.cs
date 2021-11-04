@@ -17,7 +17,6 @@ namespace AmongUsCEDE.Core.Patches
 				importantTextTask.transform.SetParent(PlayerControl.LocalPlayer.transform, false);
 				importantTextTask.Text = myrole.FakeTaskString + "\r\n<color=#FFFFFFFF>" + "Fake Tasks:" + "</color>"; //THIS FINALLY WORKS!!!
 				__instance.__4__this.myTasks.Insert(0, importantTextTask);
-				UnityEngine.Debug.Log("yes" + importantTextTask.ToString());
 			}
 		}
 	}
