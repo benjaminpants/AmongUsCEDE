@@ -41,7 +41,7 @@ namespace AmongUsCEDE.UI.Patches
 				}
 
 
-				//DebugLog.ShowMessage("max:" + __instance.GetComponentInParent<Scroller>().YBounds.max / (__instance.GetComponentsInChildren<OptionBehaviour>().Length - 2));
+				//UnityEngine.Debug.Log("max:" + __instance.GetComponentInParent<Scroller>().YBounds.max / (__instance.GetComponentsInChildren<OptionBehaviour>().Length - 2));
 
 				__instance.Children = (UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour>)__instance.GetComponentsInChildren<OptionBehaviour>();
 				__instance.cachedData = PlayerControl.GameOptions;

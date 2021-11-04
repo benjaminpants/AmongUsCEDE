@@ -38,7 +38,7 @@ namespace AmongUsCEDE.Mods
 			}
 			else
 			{
-				DebugLog.ShowMessage("key:" + key + "\nval is null:" + (val == null) + "\ntype:" + val.Type + "\n" + defaul.Type);
+				UnityEngine.Debug.Log("key:" + key + "\nval is null:" + (val == null) + "\ntype:" + val.Type + "\n" + defaul.Type);
 				return defaul;
 			}
 		}
@@ -146,7 +146,7 @@ namespace AmongUsCEDE.Mods
 			role.Visibility = (RoleVisibility)parms.TryGet("role_vis", DynValue.NewNumber(0)).Number;
 			role.HasTasks = parms.TryGet("has_tasks", DynValue.True).Boolean;
 			role.ImmuneToAffectors = parms.TryGet("immune_to_light_affectors", DynValue.False).Boolean;
-			DebugLog.ShowMessage(role.HasTasks.ToString());
+			UnityEngine.Debug.Log(role.HasTasks.ToString());
 			role.Layer = (byte)parms.TryGet("layer", DynValue.NewNumber(255)).Number;
 			role.Team = (byte)parms.TryGet("team", DynValue.NewNumber(0)).Number;
 			DynValue colorval = parms.TryGet("color", DynValue.NewNil(), false);
@@ -171,7 +171,7 @@ namespace AmongUsCEDE.Mods
 
 			role.PrimaryTargets = (PrimaryTarget)targetvalue.Number;
 
-			DebugLog.ShowMessage(role.ToString());
+			UnityEngine.Debug.Log(role.ToString());
 
 			ModLoader.TempRoles.Add(role);
 
@@ -208,7 +208,7 @@ namespace AmongUsCEDE.Mods
 				case "error":
 					break;
 				default:
-					DebugLog.ShowMessage("Invalid VictoryType. Cancelling game with Error.");
+					UnityEngine.Debug.Log("Invalid VictoryType. Cancelling game with Error.");
 					break;
 			}
 			GameFunctions.WriteVictory(new List<GameData.PlayerInfo>(), "hardcoded", tp);

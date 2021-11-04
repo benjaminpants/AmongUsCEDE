@@ -8,6 +8,7 @@ using System.Linq;
 using Hazel;
 using AmongUsCEDE.Lua;
 using MoonSharp.Interpreter;
+using BepInEx.IL2CPP;
 
 namespace AmongUsCEDE.Core
 {
