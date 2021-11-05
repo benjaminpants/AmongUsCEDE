@@ -3,6 +3,7 @@ using AmongUsCEDE.Core;
 using AmongUsCEDE.Core.Extensions;
 using AmongUsCEDE.LuaData;
 using HarmonyLib;
+using MoonSharp.Interpreter;
 
 
 namespace AmongUsCEDE
@@ -14,11 +15,12 @@ namespace AmongUsCEDE
 	{
 		private static void Postfix(ExileController __instance, GameData.PlayerInfo exiled)
 		{
+			__instance.ImpostorText.text = "";
 			if (!PlayerControl.GameOptions.ConfirmImpostor)
 			{
-				__instance.ImpostorText.text = "";
+				return;
 			}
-			else if (exiled != null)
+			if (exiled != null)
 			{
 				Role role = exiled.GetRole();
 				string join = "the";
@@ -27,8 +29,16 @@ namespace AmongUsCEDE
 					join = exiled.PlayerName.AOrAn(false);
 				}
 				__instance.completeString = exiled.PlayerName + " was " + join + " " + role.Name;
-				__instance.ImpostorText.text = "";
+				
 			}
+
+			PlayerInfoLua luafo = null;
+			if (__instance.exiled != null)
+			{
+				luafo = (PlayerInfoLua)__instance.exiled;
+			}
+			DynValue man = ScriptManager.CallCurrentGMHooks("GetRemainText", luafo);
+			__instance.ImpostorText.text = man == null ? "" : man.String;
 		}
 	}
 

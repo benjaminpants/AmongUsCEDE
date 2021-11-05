@@ -8,6 +8,7 @@ using InnerNet;
 using Hazel;
 using PowerTools;
 using UnityEngine;
+using AmongUsCEDE.Extensions;
 
 namespace AmongUsCEDE.Core.Patches
 {
@@ -21,9 +22,16 @@ namespace AmongUsCEDE.Core.Patches
 			target.Data.IsImpostor = false;
 		}
 
-		static void Postfix(PlayerControl __instance)
+		static void Postfix(PlayerControl __instance, PlayerControl target)
 		{
 			__instance.Data.IsImpostor = false;
+			if (target.AmOwner)
+			{
+				if (!target.Data.GetRole().HasTasks)
+				{
+					target.myTasks.RemoveAt(0);
+				}
+			}
 
 
 		}

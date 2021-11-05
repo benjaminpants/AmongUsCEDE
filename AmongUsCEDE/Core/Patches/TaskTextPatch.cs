@@ -13,7 +13,7 @@ namespace AmongUsCEDE.Core.Patches
 			Role myrole = __instance.__4__this.Data.GetRole();
 			if (!myrole.HasTasks)
 			{
-				ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
+				ImportantTextTask importantTextTask = new GameObject("_ImportantTask").AddComponent<ImportantTextTask>();
 				importantTextTask.transform.SetParent(PlayerControl.LocalPlayer.transform, false);
 				importantTextTask.Text = myrole.FakeTaskString + "\r\n<color=#FFFFFFFF>" + "Fake Tasks:" + "</color>"; //THIS FINALLY WORKS!!!
 				__instance.__4__this.myTasks.Insert(0, importantTextTask);

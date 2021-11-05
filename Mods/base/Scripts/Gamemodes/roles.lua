@@ -13,6 +13,18 @@ function InitializeGamemode()
 	})
 	
 	CE_AddRole({
+		internal_name = "sheriff",
+		name = "Sheriff",
+		role_text = "Track and Kill the Impostor.",
+		specials = {RS_Primary,RS_Report},
+		has_tasks = true,
+		layer = 255, --special layer that shows everyone regardless of layer
+		team = 0,
+		role_vis = RV_None,
+		color = {r=255,g=216,b=0}
+	})
+	
+	CE_AddRole({
 		internal_name = "impostor",
 		name = "Impostor",
 		role_text = "",
@@ -36,13 +48,12 @@ function InitializeGamemode()
 		task_text = "Decieve the crew into thinking you are an impostor.",
 		specials = {RS_Report},
 		has_tasks = false,
-		role_vis = RV_None,
+		role_vis = RV_Script,
 		layer = 0,
 		team = 2,
 		primary_valid_targets = VPT_Others,
-		immune_to_light_affectors = true,
-		color = {r=255,g=25,b=25},
-		name_color = {r=255,g=25,b=25}
+		immune_to_light_affectors = false,
+		color = {r=129,g=41,b=139}
 	})
 	
 	
@@ -67,13 +78,73 @@ function InitializeGamemode()
 		end
 	end)
 	
+	CE_AddHook("GetRemainText", function(ejected)
+		local imp_sub = 0
+		if (ejected.Role == "impostor") then
+			imp_sub = 1
+		end
+		return (#CE_GetAllPlayersOnTeam(1,true) - imp_sub) .. " impostors remain."
+	end)
+	
+	CE_AddHook("OnPlayerDeath", function(victim,reason)
+		if (not CE_AmHost()) then return end
+		if (victim.role == "sheriff" and CE_GetBoolSetting("ce_sheriff_behavior")) then
+			ReAssignSheriff(victim)
+		end
+	end)
+	
 	CE_AddStringSetting("vent_setting","Who Can Vent", 1, {"Impostors Only","Everybody","Nobody"})
 	CE_AddToggleSetting("end_on_zero_only","Game Only ends on 0 Crew", false, {"True","False"})
 	CE_AddToggleSetting("vent_visibility","Visibility In Vents", true, {"Yes","No"})
+	CE_AddIntSetting("sheriff_count","Sheriff Count","", 0, 1, 0, 2)
+	CE_AddToggleSetting("ce_sheriff_behavior","CE Sheriff Behavior", true, {"Enabled","Disabled"})
 	CE_AddIntSetting("jester_count","Jester Count","", 0, 1, 0, 1)
+	CE_AddToggleSetting("imps_see_jester","Impostors See Jester", true, {"Yes","No"})
 	
 	return {"Roles","roles"} --Display Name then Internal Name
 end
+
+function GetValidReplacableRole(dodge)
+	local players = CE_GetAllPlayers(true)
+	local valid_players = {}
+	for	i=1, #players do
+		if (players[i].Role == "crewmate") then
+			if (dodge == nil) then
+				table.insert(valid_players,players[i])
+			else
+				if (players[i].PlayerId ~= dodge.PlayerId) then
+					table.insert(valid_players,players[i])
+				end
+			end
+		end
+	end
+	if (#valid_players == 0) then return nil end
+	return valid_players[math.random(1,#valid_players)]
+end
+
+function ReAssignSheriff(victim,dodge)
+	if (not CE_AmHost()) then return end
+	local valid_replacable = GetValidReplacableRole(dodge)
+	if (valid_replacable ~= nil) then
+		CE_SetRoles({victim,valid_replacable},{"crewmate","sheriff"})
+	end
+end
+
+
+function IsRoleConsideredBad(role)
+	return (role == "impostor" or role == "witch" or role == "jester")
+end
+
+
+function CanSeeRole(name,owner,viewer)
+	if (name == "jester" and CE_GetBoolSetting("imps_see_jester")) then
+		if (viewer.Role == "impostor") then
+			return true
+		end
+	end
+	return false
+end
+
 
 local function lerp(a, b, t)
 	return a + (b - a) * t
@@ -109,9 +180,14 @@ function SelectRoles(players) --WHAT. THE FUCK. IS GOING ON.
 	end
 	
 	local jest_count = CE_GetNumberSetting("jester_count")
+	local sheriff_count = CE_GetNumberSetting("sheriff_count")
 	
 	for i=1, jest_count do
 		table.insert(RolesToGive,"jester")
+	end
+	
+	for i=1, sheriff_count do
+		table.insert(RolesToGive,"sheriff")
 	end
 	
 	
@@ -130,6 +206,9 @@ function SelectRoles(players) --WHAT. THE FUCK. IS GOING ON.
 end
 
 function CanUsePrimary(user,victim)
+	if (user.Role == "sheriff") then
+		return true
+	end
 	if (user.PlayerId == victim.PlayerId) then --let them commit death on themselves lol, should probs be removed for other roles though lol
 		return true
 	end
@@ -137,7 +216,7 @@ function CanUsePrimary(user,victim)
 		return false
 	end
 	if (user.Role == "impostor") then
-		if (victim.Role == "impostor") then
+		if (victim.Layer == 1 or (victim.Role == "jester" and CE_GetBoolSetting("imps_see_jester"))) then
 			return false
 		end
 	end
@@ -150,12 +229,19 @@ function CheckEndCriteria(tasks_complete, sab_loss)
 	local jesters = CE_GetAllPlayersOnTeam(2,true)
 	local total_of_all = #jesters + #crewmates
 	
-	
+	--current goal conditions:
+	--sab loss
+	--nobody on any team
+	--imp win due to kills
+	--no impostors win
+	--tasks complete
+	--jester stalemate
 	
 	if (sab_loss) then
 		CE_WinGame(CE_GetAllPlayersOnTeam(1,false),"default_impostor")
 		return
 	end
+	
 	
 	if (#crewmates == 0 and #impostors == 0) then
 		CE_WinGameAlt("stalemate")
@@ -168,7 +254,7 @@ function CheckEndCriteria(tasks_complete, sab_loss)
 			return
 		end
 	else
-		if (#crewmates == 0 and #impostors ~= 0) then
+		if (total_of_all == 0 and #impostors ~= 0) then
 			CE_WinGame(CE_GetAllPlayersOnTeam(1,false),"default_impostor")
 			return
 		end
@@ -182,6 +268,12 @@ function CheckEndCriteria(tasks_complete, sab_loss)
 	if (tasks_complete) then
 		CE_WinGame(CE_GetAllPlayersOnTeam(0,false),"default_crewmate")
 		return
+	end
+	
+	if (#impostors ~= 0) then
+		if ((#jesters > #crewmates) and #crewmates <= #impostors) then
+			CE_WinGameAlt("stalemate")
+		end
 	end
 	
 	
@@ -202,6 +294,15 @@ end
 function OnUsePrimary(user,victim) --attention all gamers, feel free to call CanUsePrimary here, also this is ran on the host
 	if (not CanUsePrimary(user,victim)) then
 		return
+	end
+	if (user.Role == "sheriff") then
+		if (CE_GetBoolSetting("ce_sheriff_behavior")) then
+			ReAssignSheriff(user,victim)
+		else
+			if (not IsRoleConsideredBad(victim.Role)) then
+				CE_MurderPlayer(user,user,false)
+			end
+		end
 	end
 	CE_MurderPlayer(user,victim,true)
 	

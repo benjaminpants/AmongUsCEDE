@@ -146,7 +146,16 @@ namespace AmongUsCEDE.Mods
 			AddEnumToLuaScript(script, "RV_", typeof(RoleVisibility));
 			AddEnumToLuaScript(script, "VPT_", typeof(PrimaryTarget));
 			AddEnumToLuaScript(script, "ST_", typeof(SystemTypes));
-			script.DoString(text);
+			AddEnumToLuaScript(script, "DR_", typeof(DeathReason));
+			try
+			{
+				script.DoString(text);
+			}
+			catch(SyntaxErrorException except)
+			{
+				Debug.LogError(except.DecoratedMessage);
+				return false;
+			}
 			DynValue vals = script.Call(script.Globals["InitializeGamemode"]);
 			if (vals.Type != DataType.Table) return false;
 			Gamemode GM = new Gamemode(vals.Table.Get(2).String, vals.Table.Get(1).String);
@@ -186,6 +195,7 @@ namespace AmongUsCEDE.Mods
 					script.Globals["CE_GetInternalNumberSetting"] = (Func<string, float>)VariousScriptFunctions.GetInternalNumberSetting;
 					script.Globals["CE_AmHost"] = (Func<bool>)VariousScriptFunctions.AmHost;
 					script.Globals["CE_SendToHost"] = (Action<byte,bool,List<DynValue>>)VariousScriptFunctions.SendToHost; //TODO: Make this not rely on DynValues
+					script.Globals["CE_SetRoles"] = (Action<List<PlayerInfoLua>, List<string>>)VariousScriptFunctions.SetRolesNoIntro;
 					if (includeinit)
 					{
 						script.Globals["CE_AddRole"] = (Action<Table>)VariousScriptFunctions.AddRoleLua;

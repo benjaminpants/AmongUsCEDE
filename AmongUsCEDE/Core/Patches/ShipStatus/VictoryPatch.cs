@@ -13,7 +13,6 @@ class VictoryPatch
 		{
 			return false;
 		}
-		if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Ended) return false;
 		bool IsSabotageEnd = false;
 		//there used to be a lot of copied stuff here but due to my incompetence its no longer here
 		if (__instance.Systems.ContainsKey(SystemTypes.LifeSupp))

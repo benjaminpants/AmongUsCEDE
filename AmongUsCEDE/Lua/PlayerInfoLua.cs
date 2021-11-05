@@ -97,6 +97,20 @@ namespace AmongUsCEDE.LuaData
 			private set;
 		}
 
+
+		public byte Team
+		{
+			get;
+			private set;
+		}
+
+
+		public byte Layer
+		{
+			get;
+			private set;
+		}
+
 		public static explicit operator PlayerInfoLua(GameData.PlayerInfo b)
 		{
 			return new PlayerInfoLua(b);
@@ -134,6 +148,8 @@ namespace AmongUsCEDE.LuaData
 				SkinId = plf.SkinId;
 				PetId = plf.PetId;
 				Role = plf.GetRole().Internal_Name;
+				Layer = plf.GetRole().Layer;
+				Team = plf.GetRole().Team;
 				Disconnected = plf.Disconnected;
 				IsDead = plf.IsDead;
 				PosX = plf.Object.transform.position.x;

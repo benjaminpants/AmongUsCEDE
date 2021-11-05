@@ -167,7 +167,10 @@ namespace AmongUsCEDE.Core
 
 		public static void SetRoles(PlayerControl self, byte[] players, byte[] roles, bool showintro)
 		{
-			StatsManager.Instance.LastGameStarted = Il2CppSystem.DateTime.UtcNow;
+			if (showintro)
+			{
+				StatsManager.Instance.LastGameStarted = Il2CppSystem.DateTime.UtcNow;
+			}
 			for (int i = 0; i < roles.Length; i++)
 			{
 				if (roles[i] == 0) continue;
@@ -175,7 +178,6 @@ namespace AmongUsCEDE.Core
 				if (playerById != null)
 				{
 					playerById.GetExtension().Role = roles[i];
-					UnityEngine.Debug.Log(playerById.GetExtension().Role.ToString());
 				}
 			}
 			GameData.PlayerInfo data = PlayerControl.LocalPlayer.Data;
@@ -183,7 +185,10 @@ namespace AmongUsCEDE.Core
 			DestroyableSingleton<HudManager>.Instance.MapButton.gameObject.SetActive(true);
 			DestroyableSingleton<HudManager>.Instance.ReportButton.gameObject.SetActive(myrole.CanDo(RoleSpecials.Report,data));
 			DestroyableSingleton<HudManager>.Instance.UseButton.gameObject.SetActive(true);
-			PlayerControl.LocalPlayer.RemainingEmergencies = PlayerControl.GameOptions.NumEmergencyMeetings;
+			if (showintro)
+			{
+				PlayerControl.LocalPlayer.RemainingEmergencies = PlayerControl.GameOptions.NumEmergencyMeetings;
+			}
 			if (myrole.CanDo(RoleSpecials.Primary, data))
 			{
 				DestroyableSingleton<HudManager>.Instance.KillButton.gameObject.SetActive(true);
@@ -191,18 +196,23 @@ namespace AmongUsCEDE.Core
 			}
 			HudManager.Instance.SetHudActive(true);
 
+			if (GameObject.Find("_ImportantTask") && !showintro)
+			{
+				PlayerControl.LocalPlayer.myTasks.Remove(GameObject.Find("_ImportantTask").GetComponent<PlayerTask>());
+			}
+
 			for (int j = 0; j < players.Length; j++)
 			{
 				GameData.PlayerInfo playerById2 = GameData.Instance.GetPlayerById(players[j]);
 				if (playerById2 != null)
 				{
-					if (playerById2.GetRole().CanBeSeen(PlayerControl.LocalPlayer.Data))
+					if (playerById2.GetRole().CanBeSeen(playerById2, PlayerControl.LocalPlayer.Data))
 					{
 						playerById2.Object.nameText.color = playerById2.GetRole().RoleTextColor;
 					}
 				}
 			}
-			if (!DestroyableSingleton<TutorialManager>.InstanceExists)
+			if (!DestroyableSingleton<TutorialManager>.InstanceExists && showintro)
 			{
 				List<PlayerControl> yourTeam;
 				//get all players, convert them back to a regular, sane list. im going to create a conversion function i stg.
@@ -238,11 +248,8 @@ namespace AmongUsCEDE.Core
 				{
 					yourteamreal.Add(yourTeam[i]);
 				}
-
-				if (showintro)
-				{
-					DestroyableSingleton<HudManager>.Instance.StartCoroutine(DestroyableSingleton<HudManager>.Instance.CoShowIntro(yourteamreal));
-				}
+				
+				DestroyableSingleton<HudManager>.Instance.StartCoroutine(DestroyableSingleton<HudManager>.Instance.CoShowIntro(yourteamreal));
 
 			}
 		}

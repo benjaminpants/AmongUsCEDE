@@ -48,12 +48,13 @@ namespace AmongUsCEDE.Core
 			return Name + ":" + Internal_Name + "\nColor:" + RoleColor.ToString();
 		}
 
-		public bool CanBeSeen(GameData.PlayerInfo playfo)
+		public bool CanBeSeen(GameData.PlayerInfo holder, GameData.PlayerInfo playfo)
 		{
-			switch(Visibility)
+			if (holder.PlayerId == playfo.PlayerId) return true;
+			switch (Visibility)
 			{
 				case RoleVisibility.None:
-					return playfo.PlayerId == PlayerControl.LocalPlayer.PlayerId;
+					return holder.PlayerId == playfo.PlayerId;
 				case RoleVisibility.SameRole:
 					return playfo.GetRole().Internal_Name == Internal_Name;
 				case RoleVisibility.SameTeam:
@@ -61,7 +62,7 @@ namespace AmongUsCEDE.Core
 				case RoleVisibility.SameLayer:
 					return playfo.GetRole().Layer == Layer;
 				case RoleVisibility.Script:
-					throw new NotImplementedException("RoleVisibility.Script has not been implemented yet!");
+					return ScriptManager.RunCurrentGMFunction("CanSeeRole",false, Internal_Name, (PlayerInfoLua)holder, (PlayerInfoLua)playfo).Boolean;
 				case RoleVisibility.Everyone:
 					return true;
 

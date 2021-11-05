@@ -43,6 +43,16 @@ namespace AmongUsCEDE.Mods
 			}
 		}
 
+		public static void SetRolesNoIntro(List<PlayerInfoLua> players, List<string> roles)
+		{
+			List<GameData.PlayerInfo> playersreal = new List<GameData.PlayerInfo>();
+			for (int i = 0; i < players.Count; i++)
+			{
+				playersreal.Add(players[i].refplayer);
+			}
+			GameFunctions.RpcSetRoles(PlayerControl.LocalPlayer,playersreal.ToArray(),roles.ToArray(),false);
+		}
+
 		public static void SendToHost(byte id, bool important, List<DynValue> values)
 		{
 			GameFunctions.SendCustomHostRequestRPC(PlayerControl.LocalPlayer,id, important, values);

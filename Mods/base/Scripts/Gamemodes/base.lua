@@ -41,6 +41,14 @@ function InitializeGamemode()
 		return usual
 	end)
 	
+	CE_AddHook("GetRemainText", function(ejected)
+		local imp_sub = 0
+		if (ejected.Role == "impostor") then
+			imp_sub = 1
+		end
+		return (#CE_GetAllPlayersOnTeam(1,true) - imp_sub) .. " impostors remain."
+	end)
+	
 	CE_AddStringSetting("vent_setting","Who Can Vent", 1, {"Impostors Only","Everybody","Nobody"})
 	CE_AddToggleSetting("end_on_zero_only","Game Only ends on 0 Crew", false, {"True","False"})
 	CE_AddToggleSetting("vent_visibility","Visibility In Vents", true, {"Yes","No"})
