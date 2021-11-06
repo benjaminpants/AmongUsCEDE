@@ -40,6 +40,22 @@ function InitializeGamemode()
 		name_color = {r=255,g=25,b=25}
 	})
 	
+	CE_AddRole({
+		internal_name = "griefer",
+		name = "Griefer",
+		role_text = "Make someone look like they killed you.",
+		task_text = "Make someone look guilty.",
+		specials = {RS_Primary,RS_Vent,RS_Report},
+		has_tasks = false,
+		role_vis = RV_SameLayer,
+		layer = 1,
+		team = 1,
+		primary_valid_targets = VPT_Others,
+		immune_to_light_affectors = true,
+		color = {r=255,g=25,b=25},
+		name_color = {r=255,g=25,b=25}
+	})
+	
 	
 	CE_AddRole({
 		internal_name = "jester",
@@ -100,6 +116,7 @@ function InitializeGamemode()
 	CE_AddToggleSetting("ce_sheriff_behavior","CE Sheriff Behavior", true, {"Enabled","Disabled"})
 	CE_AddIntSetting("jester_count","Jester Count","", 0, 1, 0, 1)
 	CE_AddToggleSetting("imps_see_jester","Impostors See Jester", true, {"Yes","No"})
+	CE_AddIntSetting("griefer_count","Griefer Count","", 0, 1, 0, 2)
 	
 	return {"Roles","roles"} --Display Name then Internal Name
 end
@@ -138,7 +155,7 @@ end
 
 function CanSeeRole(name,owner,viewer)
 	if (name == "jester" and CE_GetBoolSetting("imps_see_jester")) then
-		if (viewer.Role == "impostor") then
+		if (viewer.Role == "impostor" or viewer.Role == "griefer") then
 			return true
 		end
 	end
@@ -157,7 +174,7 @@ function CalculateLightRadius(player,minradius,maxradius,lightsab) --lightsab is
 		end
 	end
 	local mult = CE_GetInternalNumberSetting("crewmate_vision")
-	if (player.Role == "impostor") then
+	if (player.Role == "impostor" or player.Role == "griefer") then
 		return maxradius * CE_GetInternalNumberSetting("impostor_vision")
 	else
 		mult = CE_GetInternalNumberSetting("crewmate_vision")
@@ -181,6 +198,7 @@ function SelectRoles(players) --WHAT. THE FUCK. IS GOING ON.
 	
 	local jest_count = CE_GetNumberSetting("jester_count")
 	local sheriff_count = CE_GetNumberSetting("sheriff_count")
+	local griefer_count = CE_GetNumberSetting("griefer_count")
 	
 	for i=1, jest_count do
 		table.insert(RolesToGive,"jester")
@@ -188,6 +206,10 @@ function SelectRoles(players) --WHAT. THE FUCK. IS GOING ON.
 	
 	for i=1, sheriff_count do
 		table.insert(RolesToGive,"sheriff")
+	end
+	
+	for i=1, griefer_count do
+		table.insert(RolesToGive,"griefer")
 	end
 	
 	
@@ -212,15 +234,13 @@ function CanUsePrimary(user,victim)
 	if (user.PlayerId == victim.PlayerId) then --let them commit death on themselves lol, should probs be removed for other roles though lol
 		return true
 	end
-	if (user.Role ~= "impostor") then
-		return false
-	end
-	if (user.Role == "impostor") then
-		if (victim.Layer == 1 or (victim.Role == "jester" and CE_GetBoolSetting("imps_see_jester"))) then
-			return false
+	if (user.Role == "impostor" or user.Role == "griefer") then
+		if (victim.Layer ~= 1 and (victim.Role ~= "jester" or not CE_GetBoolSetting("imps_see_jester"))) then
+			return true
 		end
 	end
-	return true
+	
+	return false
 end
 
 function CheckEndCriteria(tasks_complete, sab_loss)
@@ -301,9 +321,15 @@ function OnUsePrimary(user,victim) --attention all gamers, feel free to call Can
 		else
 			if (not IsRoleConsideredBad(victim.Role)) then
 				CE_MurderPlayer(user,user,false)
+				return
 			end
 		end
 	end
-	CE_MurderPlayer(user,victim,true)
+	
+	if (user.role ~= "griefer") then
+		CE_MurderPlayer(user,victim,true)
+	else
+		CE_MurderPlayer(victim,user,true)
+	end
 	
 end
