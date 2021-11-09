@@ -105,7 +105,7 @@ function SelectRoles(players) --WHAT. THE FUCK. IS GOING ON.
 end
 
 function CanUsePrimary(user,victim)
-	if (user.PlayerId == victim.PlayerId) then --let them commit death on themselves lol, should probs be removed for other roles though lol
+	if (user.ID == victim.ID) then --let them commit death on themselves lol, should probs be removed for other roles though lol
 		return true
 	end
 	if (user.Role ~= "impostor") then

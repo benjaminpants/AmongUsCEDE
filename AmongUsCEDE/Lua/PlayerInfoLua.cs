@@ -16,38 +16,38 @@ namespace AmongUsCEDE.LuaData
 		[MoonSharpHidden]
 		public GameData.PlayerInfo refplayer;
 
-		public byte PlayerId
+		public byte ID
 		{
 			get;
 			private set;
 		}
 
-		public string PlayerName
+		public string Name
 		{
 			get;
 			set;
 		} = string.Empty;
 
 
-		public int ColorId
+		public int Color
 		{
 			get;
 			set;
 		}
 
-		public uint HatId
+		public uint Hat
 		{
 			get;
 			set;
 		}
 
-		public uint SkinId
+		public uint Skin
 		{
 			get;
 			set;
 		}
 
-		public uint PetId
+		public uint Pet
 		{
 			get;
 			set;
@@ -118,7 +118,7 @@ namespace AmongUsCEDE.LuaData
 		public void SetUserDataValue(int value, int toset) //this isn't tested
 		{
 			if (!AmongUsClient.Instance.AmHost) return;
-			SetFunctions.RPCSetUserData(PlayerControl.LocalPlayer, refplayer.Object, value, toset);
+			SetFunctions.RPCSetUserData(PlayerControl.LocalPlayer, refplayer.Object, value - 1, toset);
 		}
 
 		public static explicit operator PlayerInfoLua(GameData.PlayerInfo b)
@@ -139,12 +139,12 @@ namespace AmongUsCEDE.LuaData
 			}
 			else
 			{
-				PlayerId = plf.PlayerId;
-				PlayerName = plf.PlayerName;
-				ColorId = plf.ColorId;
-				HatId = plf.HatId;
-				SkinId = plf.SkinId;
-				PetId = plf.PetId;
+				ID = plf.PlayerId;
+				Name = plf.PlayerName;
+				Color = plf.ColorId;
+				Hat = plf.HatId;
+				Skin = plf.SkinId;
+				Pet = plf.PetId;
 				Role = plf.GetRole().Internal_Name;
 				Layer = plf.GetRole().Layer;
 				Team = plf.GetRole().Team;

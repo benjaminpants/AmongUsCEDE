@@ -40,7 +40,7 @@ namespace AmongUsCEDE.Lua
 					if (value.UserData.Descriptor.Type == typeof(PlayerInfoLua))
 					{
 						me.Write((byte)1);
-						me.Write(((PlayerInfoLua)value.UserData.Object).PlayerId);
+						me.Write(((PlayerInfoLua)value.UserData.Object).ID);
 					}
 					else
 					{

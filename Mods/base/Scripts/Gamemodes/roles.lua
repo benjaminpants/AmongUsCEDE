@@ -142,7 +142,7 @@ function GetValidReplacableRole(dodge)
 			if (dodge == nil) then
 				table.insert(valid_players,players[i])
 			else
-				if (players[i].PlayerId ~= dodge.PlayerId) then
+				if (players[i].ID ~= dodge.ID) then
 					table.insert(valid_players,players[i])
 				end
 			end
@@ -252,7 +252,7 @@ function CanUsePrimary(user,victim)
 	if (user.Role == "sheriff") then
 		return true
 	end
-	if (user.PlayerId == victim.PlayerId) then --let them commit death on themselves lol, should probs be removed for other roles though lol
+	if (user.ID == victim.ID) then --let them commit death on themselves lol, should probs be removed for other roles though lol
 		return true
 	end
 	if (user.Role == "impostor" or user.Role == "griefer") then
