@@ -13,6 +13,18 @@ function InitializeGamemode()
 	})
 	
 	CE_AddRole({
+		internal_name = "shielded",
+		name = "Shielded",
+		role_text = "You have a shield to avoid one death.",
+		specials = {RS_Report},
+		has_tasks = true,
+		layer = 255, --special layer that shows everyone regardless of layer
+		team = 0,
+		role_vis = RV_None,
+		color = {r=107, g=107, b=107}
+	})
+	
+	CE_AddRole({
 		internal_name = "hawk",
 		name = "Hawk-Eyed",
 		role_text = "Use your increased vision to find the <color=#FF0000FF>Impostor.</color>",
@@ -123,13 +135,21 @@ function InitializeGamemode()
 	CE_AddStringSetting("vent_setting","Who Can Vent", 1, {"Impostors Only","Everybody","Nobody"})
 	CE_AddToggleSetting("end_on_zero_only","Game Only ends on 0 Crew", false, {"True","False"})
 	CE_AddToggleSetting("vent_visibility","Visibility In Vents", true, {"Yes","No"})
+	--sheriffs
 	CE_AddIntSetting("sheriff_count","Sheriff Count","", 0, 1, 0, 2)
 	CE_AddToggleSetting("ce_sheriff_behavior","CE Sheriff Behavior", true, {"Enabled","Disabled"})
+	--jesters
 	CE_AddIntSetting("jester_count","Jester Count","", 0, 1, 0, 1)
 	CE_AddToggleSetting("imps_see_jester","Impostors See Jester", true, {"Yes","No"})
+	--griefers
 	CE_AddIntSetting("griefer_count","Griefer Count","", 0, 1, 0, 2)
+	--hawks
 	CE_AddIntSetting("hawk_count","Hawk-Eyed Count","", 0, 1, 0, 4)
 	CE_AddFloatSetting("hawk_vision","Hawk-Eyed Vision","", 2, 0.25, 0.25, 5)
+	--shielded
+	CE_AddIntSetting("shielded_count","Shielded Count","", 0, 1, 0, 4)
+	CE_AddToggleSetting("shielded_kill","Shields Kill Attackers", false, {"Yes","No"})
+	CE_AddToggleSetting("shielded_know","Shieldeds know when shield breaks", false, {"Yes","No"})
 	
 	return {"Roles","roles"} --Display Name then Internal Name
 end
@@ -216,6 +236,7 @@ function SelectRoles(players)
 	local sheriff_count = CE_GetNumberSetting("sheriff_count")
 	local griefer_count = CE_GetNumberSetting("griefer_count")
 	local hawk_count = CE_GetNumberSetting("hawk_count")
+	local shielded_count = CE_GetNumberSetting("shielded_count")
 	
 	for i=1, jest_count do
 		table.insert(RolesToGive,"jester")
@@ -231,6 +252,10 @@ function SelectRoles(players)
 	
 	for i=1, hawk_count do
 		table.insert(RolesToGive,"hawk")
+	end
+	
+	for i=1, shielded_count do
+		table.insert(RolesToGive,"shielded")
 	end
 	
 	
@@ -347,7 +372,16 @@ function OnUsePrimary(user,victim) --attention all gamers, feel free to call Can
 		end
 	end
 	
-	if (user.role ~= "griefer") then
+	if (user.Role ~= "griefer") then
+		if (victim.Role == "shielded" and victim.UserData[1] == 0) then
+			victim.SetUserDataValue(1,1)
+			if (CE_GetBoolSetting("shielded_kill")) then
+				CE_MurderPlayer(user,user,false)
+			end
+			return
+		
+		end
+	
 		CE_MurderPlayer(user,victim,true)
 	else
 		CE_MurderPlayer(victim,user,true)
