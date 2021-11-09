@@ -1,3 +1,7 @@
+# THIS PROJECT IS INCOMPLETE, AND THE BELOW README TALKS ABOUT FEATURES THAT AREN'T IMPLEMENTED YET
+
+
+
 # Among Us Community Edition (Definitive Edition)
 ## _The Most Customizable Among Us Experience._
 
@@ -14,7 +18,7 @@ Among Us CE: DE also allows the easy creation of custom hats and colors.
 Among Us CE: DE plans to lower the barrier of entry for creating Among Us mods, and hopefully get tons of people into programming that wouldn't have even given it a shot otherwise.
 
 As Ben(the founder of the project) once said.
-> If I managed to inspire atleast one person, gave them the same spark and interest in modding that I had..
+> If I managed to inspire atleast one person, give them the same spark and interest in modding that I had..
 > Then it was all worth it.
 
 ## Compilation
