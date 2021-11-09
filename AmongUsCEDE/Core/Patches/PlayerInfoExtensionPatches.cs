@@ -103,22 +103,12 @@ namespace AmongUsCEDE.Core.Patches
 			static void Postfix(GameData.PlayerInfo __instance, ref MessageWriter writer)
 			{
 				PlayerInfoExtension ext = __instance.GetExtension();
-				if (ext != null)
+				writer.Write((byte)ext.Role);
+				for (int i = 0; i < AmongUsCEDE.Lua_UserDataAmount; i++)
 				{
-					writer.Write((byte)ext.Role);
-					for (int i = 0; i < AmongUsCEDE.Lua_UserDataAmount; i++)
-					{
-						writer.WritePacked(ext.Userdata[i]);
-					}
+					writer.WritePacked(ext.Userdata[i]);
 				}
-				else
-				{
-					writer.Write((byte)0);
-					for (int i = 0; i < AmongUsCEDE.Lua_UserDataAmount; i++)
-					{
-						writer.WritePacked((int)0);
-					}
-				}
+				
 			}
 		}
 
@@ -129,22 +119,12 @@ namespace AmongUsCEDE.Core.Patches
 			static void Postfix(GameData.PlayerInfo __instance, ref MessageReader reader)
 			{
 				PlayerInfoExtension ext = __instance.GetExtension();
-				if (ext != null)
+				ext.Role = reader.ReadByte();
+				for (int i = 0; i < AmongUsCEDE.Lua_UserDataAmount; i++)
 				{
-					ext.Role = reader.ReadByte();
-					for (int i = 0; i < AmongUsCEDE.Lua_UserDataAmount; i++)
-					{
-						ext.Userdata[i] = reader.ReadPackedInt32();
-					}
+					ext.Userdata[i] = reader.ReadPackedInt32();
 				}
-				else
-				{
-					reader.ReadByte();
-					for (int i = 0; i < AmongUsCEDE.Lua_UserDataAmount; i++)
-					{
-						reader.ReadPackedInt32();
-					}
-				}
+			
 			}
 		}
 	}

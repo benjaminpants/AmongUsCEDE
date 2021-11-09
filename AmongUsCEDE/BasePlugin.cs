@@ -68,7 +68,6 @@ namespace AmongUsCEDE
 		public override void Load()
 		{
 			UserData.RegisterAssembly();
-			IL2CPPChainloader.AddUnityComponent<ImportantTextTask>();
 			SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((scene, loadscenemode) =>
 			{
 				if (scene.name == "SplashIntro")

@@ -27,9 +27,10 @@ namespace AmongUsCEDE.Core.Patches
 			__instance.Data.IsImpostor = false;
 			if (target.AmOwner)
 			{
-				if (!target.Data.GetRole().HasTasks)
+				target.myTasks.RemoveAt(0); //This SHOULD remove the default death text
+				if (target.Data.GetRole().HasTasks)
 				{
-					target.myTasks.RemoveAt(0);
+					target.SetImportantText("<color=#FF0000FF>You are dead.</color>");
 				}
 			}
 

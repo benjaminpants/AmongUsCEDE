@@ -52,8 +52,7 @@ function InitializeGamemode()
 		team = 1,
 		primary_valid_targets = VPT_Others,
 		immune_to_light_affectors = true,
-		color = {r=255,g=25,b=25},
-		name_color = {r=255,g=25,b=25}
+		color = {r=87, g=85, b=42}
 	})
 	
 	
@@ -190,7 +189,7 @@ end
 
 
 
-function SelectRoles(players) --WHAT. THE FUCK. IS GOING ON.
+function SelectRoles(players)
 	local RolesToGive = {}
 	for i=1, CE_GetInternalNumberSetting("impostor_count") do
 		table.insert(RolesToGive,"impostor")

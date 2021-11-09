@@ -9,6 +9,7 @@ using Hazel;
 using AmongUsCEDE.Lua;
 using MoonSharp.Interpreter;
 using BepInEx.IL2CPP;
+using AmongUsCEDE.Extensions;
 
 namespace AmongUsCEDE.Core
 {
@@ -165,6 +166,34 @@ namespace AmongUsCEDE.Core
 		}
 
 
+
+		public static void SetImportantText(this PlayerControl player, string text)
+		{
+			if (GameObject.Find("_ImportantTask"))
+			{
+				player.myTasks.Remove(GameObject.Find("_ImportantTask").GetComponent<PlayerTask>()); //i think sabotages show higher on the task list??? TODO: verify this
+			}
+			if (text == "") return; //aka this is just a "remove the important task!!" call
+			ImportantTextTask importantTextTask = new GameObject("_ImportantTask").AddComponent<ImportantTextTask>();
+			importantTextTask.transform.SetParent(PlayerControl.LocalPlayer.transform, false);
+			importantTextTask.Text = text;
+			player.myTasks.Insert(0, importantTextTask);
+		}
+
+		public static void SetImportantText(this PlayerControl player)
+		{
+			Role myrole = player.Data.GetRole();
+			if (myrole.HasTasks)
+			{
+				SetImportantText(player,"");
+			}
+			else
+			{
+				SetImportantText(player, "<color=#" + myrole.RoleColor.ToHtmlStringRGBA() + ">" + myrole.FakeTaskString + "</color>\r\n<color=#FFFFFFFF>" + "Fake Tasks:" + "</color>");
+			}
+		}
+
+
 		public static void SetRoles(PlayerControl self, byte[] players, byte[] roles, bool showintro)
 		{
 			if (showintro)
@@ -196,9 +225,9 @@ namespace AmongUsCEDE.Core
 			}
 			HudManager.Instance.SetHudActive(true);
 
-			if (GameObject.Find("_ImportantTask") && !showintro)
+			if (!showintro)
 			{
-				PlayerControl.LocalPlayer.myTasks.Remove(GameObject.Find("_ImportantTask").GetComponent<PlayerTask>());
+				PlayerControl.LocalPlayer.SetImportantText();
 			}
 
 			for (int j = 0; j < players.Length; j++)

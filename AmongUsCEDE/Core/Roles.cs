@@ -34,6 +34,30 @@ public enum RoleVisibility
 
 namespace AmongUsCEDE.Core
 {
+	//Modifiers are pretty much a more compact way of creating role "modifiers", all logic for these are handled by the scripts.
+	//Putting this here so my stupid brain does not forget this very important design philosphy with these.
+	//Which is that these are nothing but VISUAL by default.
+	public class Modifier
+	{
+		public Color Color = Color.yellow;
+		public string internal_name;
+		public string Name;
+
+		public Modifier()
+		{
+
+		}
+
+		public Modifier(string name, string intern, Color color)
+		{
+			Name = name;
+			internal_name = intern;
+			Color = color;
+		}
+
+	}
+
+
 	public class Role
 	{
 		public Role(string Name, string Display)

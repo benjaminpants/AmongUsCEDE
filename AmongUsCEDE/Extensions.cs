@@ -37,5 +37,15 @@ namespace AmongUsCEDE.Extensions
 
 		}
 
+		public static string ToHtmlStringRGBA(this Color32 color)
+		{
+			return $"{color.r:X2}{color.g:X2}{color.b:X2}{color.a:X2}";
+		}
+
+		public static string ToHtmlStringRGBA(this Color color)
+		{
+			return ((Color32)color).ToHtmlStringRGBA();
+		}
+
 	}
 }
