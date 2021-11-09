@@ -421,4 +421,21 @@ namespace AmongUsCEDE.Core
 
 
 	}
+
+	public static class SetFunctions
+	{
+		public static void RPCSetUserData(PlayerControl self, PlayerControl player, int data, int toset)
+		{
+			if (AmongUsClient.Instance.AmClient)
+			{
+				player.Data.GetExtension().Userdata[data] = toset;
+			}
+			MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(self.NetId, 35, SendOption.Reliable);
+			messageWriter.Write(player.Data.PlayerId);
+			messageWriter.WritePacked(data);
+			messageWriter.WritePacked(toset);
+			messageWriter.EndMessage();
+		}
+	}
+
 }

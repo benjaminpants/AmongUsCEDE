@@ -59,17 +59,17 @@ namespace AmongUsCEDE.RPCs
 						}
 						else
 						{
-							GameFunctions.MurderPlayerNoAnimation(target,user);
+							GameFunctions.MurderPlayerNoAnimation(target, user);
 						}
 					}
 
 					return false;
 				case 34: //with every among us update check to make sure this isn't overwritten
 					HostRequestType request = (HostRequestType)reader.ReadByte();
-					switch(request)
+					switch (request)
 					{
 						case HostRequestType.UsePrimary:
-							GameFunctions.SendRequestToHost(__instance,request,reader.ReadByte());
+							GameFunctions.SendRequestToHost(__instance, request, reader.ReadByte());
 							break;
 						case HostRequestType.Custom:
 							GameFunctions.SendRequestToHost(__instance, request, (PlayerInfoLua)__instance, reader.ReadByte(), reader.ReadDynValueList().ToArray()); //this is complete
@@ -77,6 +77,16 @@ namespace AmongUsCEDE.RPCs
 						default:
 							return false;
 					}
+					return false;
+
+				case 35:
+					byte player = reader.ReadByte();
+					int data = reader.ReadPackedInt32();
+					int toset = reader.ReadPackedInt32();
+					GameData.PlayerInfo meplayer = GameData.Instance.GetPlayerById(player);
+					meplayer.GetExtension().Userdata[data] = toset;
+
+
 					return false;
 			}
 

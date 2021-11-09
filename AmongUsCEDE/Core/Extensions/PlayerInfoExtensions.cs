@@ -59,6 +59,11 @@ namespace AmongUsCEDE.Core.Extensions
 			return Extensions[me.PlayerId];
 		}
 
+		public static bool IsHost(this GameData.PlayerInfo me)
+		{
+			return me.PlayerId == GameData.Instance.GetHost().PlayerId;
+		}
+
 		public static bool AddExtension(this GameData.PlayerInfo me)
 		{
 			if (Extensions[me.PlayerId].IsInUse)

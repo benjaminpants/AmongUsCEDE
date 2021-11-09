@@ -2,6 +2,7 @@
 using AmongUsCEDE.Core.Extensions;
 using MoonSharp.Interpreter;
 using UnityEngine;
+using AmongUsCEDE.Core;
 
 
 
@@ -14,9 +15,6 @@ namespace AmongUsCEDE.LuaData
 	{
 		[MoonSharpHidden]
 		public GameData.PlayerInfo refplayer;
-
-		[MoonSharpHidden]
-		public static GameData.PlayerInfo ShitHolder = new GameData.PlayerInfo(0);
 
 		public byte PlayerId
 		{
@@ -111,6 +109,18 @@ namespace AmongUsCEDE.LuaData
 			private set;
 		}
 
+		public int[] UserData
+		{
+			get;
+			private set;
+		}
+
+		public void SetUserDataValue(int value, int toset) //this isn't tested
+		{
+			if (!AmongUsClient.Instance.AmHost) return;
+			SetFunctions.RPCSetUserData(PlayerControl.LocalPlayer, refplayer.Object, value, toset);
+		}
+
 		public static explicit operator PlayerInfoLua(GameData.PlayerInfo b)
 		{
 			return new PlayerInfoLua(b);
@@ -125,19 +135,7 @@ namespace AmongUsCEDE.LuaData
 		{
 			if (plf == null)
 			{
-				PlayerId = 0;
-				PlayerName = "NULL";
-				ColorId = 0;
-				HatId = 0u;
-				SkinId = 0u;
-				Disconnected = false;
-				IsDead = true;
-				Role = "internal";
-				PosX = 0f;
-				PosY = 0f;
-				refplayer = ShitHolder;
-				Debug.LogWarning("PL is null! Using Placeholder refplayer... hope shitholder doesn't actually get edited...");
-				IsLocal = false;
+				throw new System.NullReferenceException();
 			}
 			else
 			{
@@ -157,6 +155,7 @@ namespace AmongUsCEDE.LuaData
 				IsLocal = plf.PlayerId == PlayerControl.LocalPlayer.PlayerId;
 				refplayer = plf;
 				InVent = refplayer.Object.inVent;
+				UserData = refplayer.GetExtension().Userdata;
 			}
 		}
 	}
