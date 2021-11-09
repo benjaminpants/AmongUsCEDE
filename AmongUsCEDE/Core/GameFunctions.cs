@@ -169,9 +169,10 @@ namespace AmongUsCEDE.Core
 
 		public static void SetImportantText(this PlayerControl player, string text)
 		{
-			if (GameObject.Find("_ImportantTask"))
+			if (player.myTasks.Count == 0) return;
+			if (player.myTasks[0].TryCast<ImportantTextTask>())
 			{
-				player.myTasks.Remove(GameObject.Find("_ImportantTask").GetComponent<PlayerTask>()); //i think sabotages show higher on the task list??? TODO: verify this
+				player.myTasks.RemoveAt(0);
 			}
 			if (text == "") return; //aka this is just a "remove the important task!!" call
 			ImportantTextTask importantTextTask = new GameObject("_ImportantTask").AddComponent<ImportantTextTask>();
@@ -196,6 +197,7 @@ namespace AmongUsCEDE.Core
 
 		public static void SetRoles(PlayerControl self, byte[] players, byte[] roles, bool showintro)
 		{
+			bool involves_me = players.Contains(self.Data.PlayerId);
 			if (showintro)
 			{
 				StatsManager.Instance.LastGameStarted = Il2CppSystem.DateTime.UtcNow;
@@ -218,10 +220,20 @@ namespace AmongUsCEDE.Core
 			{
 				PlayerControl.LocalPlayer.RemainingEmergencies = PlayerControl.GameOptions.NumEmergencyMeetings;
 			}
-			if (myrole.CanDo(RoleSpecials.Primary, data))
+			if (involves_me)
 			{
-				DestroyableSingleton<HudManager>.Instance.KillButton.gameObject.SetActive(true);
-				PlayerControl.LocalPlayer.SetKillTimer(10f);
+				if (myrole.CanDo(RoleSpecials.Primary, data))
+				{
+					DestroyableSingleton<HudManager>.Instance.KillButton.gameObject.SetActive(true);
+					if (showintro)
+					{
+						PlayerControl.LocalPlayer.SetKillTimer(10f);
+					}
+					else
+					{
+						PlayerControl.LocalPlayer.SetKillTimer(PlayerControl.GameOptions.KillCooldown);
+					}
+				}
 			}
 			HudManager.Instance.SetHudActive(true);
 

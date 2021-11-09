@@ -13,6 +13,19 @@ function InitializeGamemode()
 	})
 	
 	CE_AddRole({
+		internal_name = "hawk",
+		name = "Hawk-Eyed",
+		role_text = "Use your increased vision to find the <color=#FF0000FF>Impostor.</color>",
+		specials = {RS_Report},
+		has_tasks = true,
+		layer = 255, --special layer that shows everyone regardless of layer
+		team = 0,
+		role_vis = RV_None,
+		color = {r=120, g=86, b=60},
+		immune_to_light_affectors = true
+	})
+	
+	CE_AddRole({
 		internal_name = "sheriff",
 		name = "Sheriff",
 		role_text = "Track and Kill the Impostor.",
@@ -64,7 +77,7 @@ function InitializeGamemode()
 		specials = {RS_Report},
 		has_tasks = false,
 		role_vis = RV_Script,
-		layer = 0,
+		layer = 0, --special layer that shows no one despite the layer they are on
 		team = 2,
 		primary_valid_targets = VPT_Others,
 		immune_to_light_affectors = false,
@@ -87,8 +100,7 @@ function InitializeGamemode()
 	CE_AddHook("OnEject", function(ejected)
 		if (not CE_AmHost()) then return end
 		if (ejected == nil) then return end
-		print(ejected.role)
-		if (ejected.role == "jester") then
+		if (ejected.Role == "jester") then
 			CE_WinGame({ejected},"default_disconnect")
 		end
 	end)
@@ -116,6 +128,8 @@ function InitializeGamemode()
 	CE_AddIntSetting("jester_count","Jester Count","", 0, 1, 0, 1)
 	CE_AddToggleSetting("imps_see_jester","Impostors See Jester", true, {"Yes","No"})
 	CE_AddIntSetting("griefer_count","Griefer Count","", 0, 1, 0, 2)
+	CE_AddIntSetting("hawk_count","Hawk-Eyed Count","", 0, 1, 0, 4)
+	CE_AddFloatSetting("hawk_vision","Hawk-Eyed Vision","", 2, 0.25, 0.25, 5)
 	
 	return {"Roles","roles"} --Display Name then Internal Name
 end
@@ -173,6 +187,9 @@ function CalculateLightRadius(player,minradius,maxradius,lightsab) --lightsab is
 		end
 	end
 	local mult = CE_GetInternalNumberSetting("crewmate_vision")
+	if (player.Role == "hawk") then
+		return maxradius * CE_GetNumberSetting("hawk_vision")
+	end
 	if (player.Role == "impostor" or player.Role == "griefer") then
 		return maxradius * CE_GetInternalNumberSetting("impostor_vision")
 	else
@@ -198,6 +215,7 @@ function SelectRoles(players)
 	local jest_count = CE_GetNumberSetting("jester_count")
 	local sheriff_count = CE_GetNumberSetting("sheriff_count")
 	local griefer_count = CE_GetNumberSetting("griefer_count")
+	local hawk_count = CE_GetNumberSetting("hawk_count")
 	
 	for i=1, jest_count do
 		table.insert(RolesToGive,"jester")
@@ -209,6 +227,10 @@ function SelectRoles(players)
 	
 	for i=1, griefer_count do
 		table.insert(RolesToGive,"griefer")
+	end
+	
+	for i=1, hawk_count do
+		table.insert(RolesToGive,"hawk")
 	end
 	
 	
