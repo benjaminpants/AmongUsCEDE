@@ -9,4 +9,12 @@ namespace AmongUsCEDE.Core
 	{
 		//NOTES: Make IsImpostor always return false
 	}
+
+
+
+
+	internal class RolePatches
+	{
+
+	}
 }
