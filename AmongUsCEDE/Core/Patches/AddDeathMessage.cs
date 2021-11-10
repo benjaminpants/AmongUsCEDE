@@ -14,17 +14,10 @@ namespace AmongUsCEDE.Core.Patches
 {
 	[HarmonyPatch(typeof(PlayerControl))]
 	[HarmonyPatch("MurderPlayer")]
-	class AllowAnyoneToMurder
+	class AddDeathMessage
 	{
-		static void Prefix(PlayerControl __instance, PlayerControl target) 
-		{
-			__instance.Data.IsImpostor = true;
-			target.Data.IsImpostor = false;
-		}
-
 		static void Postfix(PlayerControl __instance, PlayerControl target)
 		{
-			__instance.Data.IsImpostor = false;
 			if (target.AmOwner)
 			{
 				if (target.Data.GetRole().HasTasks)

@@ -14,6 +14,12 @@ using AmongUsCEDE.Extensions;
 namespace AmongUsCEDE.Core
 {
 
+
+	public enum CustomRPCs
+	{
+		CheckWithHost = 49,
+		SetUserData = 50
+	}
 	public enum HostRequestType
 	{
 		UsePrimary,
@@ -85,7 +91,7 @@ namespace AmongUsCEDE.Core
 					return;
 				}
 			}
-			MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(self.NetId, 34, SendOption.Reliable, AmongUsClient.Instance.HostId);
+			MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(self.NetId, (int)CustomRPCs.CheckWithHost, SendOption.Reliable, AmongUsClient.Instance.HostId);
 			messageWriter.Write((byte)HostRequestType.UsePrimary);
 			messageWriter.Write(plfo.Data.PlayerId);
 			//messageWriter.EndMessage();
@@ -106,11 +112,11 @@ namespace AmongUsCEDE.Core
 			MessageWriter messageWriter = null;
 			if (important)
 			{
-				messageWriter = AmongUsClient.Instance.StartRpcImmediately(self.NetId, 34, SendOption.Reliable, AmongUsClient.Instance.HostId);
+				messageWriter = AmongUsClient.Instance.StartRpcImmediately(self.NetId, (int)CustomRPCs.CheckWithHost, SendOption.Reliable, AmongUsClient.Instance.HostId);
 			}
 			else
 			{
-				messageWriter = AmongUsClient.Instance.StartRpc(self.NetId,34,SendOption.Reliable);
+				messageWriter = AmongUsClient.Instance.StartRpc(self.NetId, (int)CustomRPCs.CheckWithHost, SendOption.Reliable);
 			}
 			messageWriter.Write((byte)HostRequestType.Custom);
 			messageWriter.Write(id);
@@ -430,7 +436,7 @@ namespace AmongUsCEDE.Core
 			{
 				player.Data.GetExtension().Userdata[data] = toset;
 			}
-			MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(self.NetId, 35, SendOption.Reliable);
+			MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(self.NetId, (int)CustomRPCs.SetUserData, SendOption.Reliable);
 			messageWriter.Write(player.Data.PlayerId);
 			messageWriter.WritePacked(data);
 			messageWriter.WritePacked(toset);

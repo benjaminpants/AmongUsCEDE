@@ -28,10 +28,10 @@ namespace AmongUsCEDE.RPCs
 					PlayerControl.GameOptions = GameOptionsData.FromBytes(reader.ReadBytesAndSize());
 					GameOptionsExtension.Deserialize(reader);
 					return false;
-				case 3: //overwrite set impostors cuz impostors no exist anymore
+				case 3: //figure out what to do with this
+					return false;
 					bool dointro = reader.ReadBoolean();
 					GameFunctions.SetRoles(__instance, reader.ReadBytesAndSize(), reader.ReadBytesAndSize(), dointro); //reads the two arrays for players and roles
-					return false;
 				case 12:
 					if (GameData.Instance == null) return false;
 					PlayerControl user = MessageExtensions.ReadNetObject<PlayerControl>(reader);
@@ -64,7 +64,7 @@ namespace AmongUsCEDE.RPCs
 					}
 
 					return false;
-				case 34: //with every among us update check to make sure this isn't overwritten
+				case (int)CustomRPCs.CheckWithHost: //with every among us update check to make sure this isn't overwritten
 					HostRequestType request = (HostRequestType)reader.ReadByte();
 					switch (request)
 					{
@@ -79,7 +79,7 @@ namespace AmongUsCEDE.RPCs
 					}
 					return false;
 
-				case 35:
+				case (int)CustomRPCs.SetUserData:
 					byte player = reader.ReadByte();
 					int data = reader.ReadPackedInt32();
 					int toset = reader.ReadPackedInt32();
