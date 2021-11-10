@@ -22,6 +22,21 @@ namespace AmongUsCEDE.Core
 			}
 		}
 
+
+		public override void SpawnTaskHeader(PlayerControl playerControl)
+		{
+			playerControl.SetImportantText();
+		}
+
+		public byte RoleID;
+
+		public CustomRoleClass(byte ID)
+		{
+			Role = (RoleTypes)999;
+			RoleID = ID;
+		}
+
+
 		public override void Initialize(PlayerControl player)
 		{
 			//We gotta assume role was defined earlier or we're screwed
@@ -30,17 +45,23 @@ namespace AmongUsCEDE.Core
 			{
 				return;
 			}
-			if (this.CanUseKillButton)
+			Role role = ScriptManager.CurrentGamemode.Roles[RoleID - 1];
+			CanUseKillButton = role.CanDo(RoleSpecials.Primary, player.Data);
+			if (CanUseKillButton)
 			{
 				DestroyableSingleton<HudManager>.Instance.KillButton.Show();
-				DestroyableSingleton<HudManager>.Instance.SabotageButton.Show();
-				DestroyableSingleton<HudManager>.Instance.ImpostorVentButton.Show();
 				player.SetKillTimer(10f);
 			}
 			else
 			{
 				DestroyableSingleton<HudManager>.Instance.KillButton.Hide();
-				DestroyableSingleton<HudManager>.Instance.SabotageButton.Hide();
+			}
+			if (role.CanDo(RoleSpecials.Vent,null)) //make it grab the raw value
+			{
+				DestroyableSingleton<HudManager>.Instance.ImpostorVentButton.Show();
+			}
+			else
+			{
 				DestroyableSingleton<HudManager>.Instance.ImpostorVentButton.Hide();
 			}
 			player.nameText.color = this.NameColor;
