@@ -42,13 +42,9 @@ internal class EndGameManagerPatch
 		}
 		if (TempData.winners.ToProperList().Any((WinningPlayerData h) => h.IsYou))
 		{
-			__instance.WinText.text = "Victory";
+			__instance.WinText.text = "Victory"; //TODO: figure out localization and how to use it without causing compile failure
 			__instance.BackgroundBar.material.SetColor("_Color", Palette.CrewmateBlue);
 			WinningPlayerData winningPlayerData = TempData.winners.ToProperList().FirstOrDefault((WinningPlayerData h) => h.IsYou);
-			if (winningPlayerData != null)
-			{
-				DestroyableSingleton<Telemetry>.Instance.WonGame(winningPlayerData.ColorId, winningPlayerData.HatId);
-			}
 		}
 		else
 		{
@@ -113,7 +109,7 @@ internal class EndGameManagerPatch
 				((Component)(object)poolablePlayer.NameText).gameObject.SetActive(value: false);
 				continue;
 			}
-			poolablePlayer.NameText.text = winningPlayerData2.Name;
+			poolablePlayer.NameText.text = winningPlayerData2.PlayerName;
 			poolablePlayer.NameText.color = CETempData.AdditionalWinningInfos[i].RoleColor;
 			poolablePlayer.NameText.transform.localScale = Extensions.Inv(vector);
 			GameObjectExtensions.SetLocalZ(poolablePlayer.NameText.transform, -15f);

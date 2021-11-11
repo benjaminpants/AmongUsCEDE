@@ -43,7 +43,7 @@ namespace AmongUsCEDE
 		{
 			List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers.ToProperList();
 			int num = 0;
-			while (num++ < 100 && ((int)bodyColor >= CustomPalette.PlayerColors.Count || allPlayers.Any((GameData.PlayerInfo p) => !p.Disconnected && p.PlayerId != __instance.PlayerId && p.ColorId == (int)bodyColor)))
+			while (num++ < 100 && ((int)bodyColor >= CustomPalette.PlayerColors.Count || allPlayers.Any((GameData.PlayerInfo p) => !p.Disconnected && p.PlayerId != __instance.PlayerId && p.DefaultOutfit.ColorId == (int)bodyColor)))
 			{
 				bodyColor = (byte)((int)(bodyColor + 1) % CustomPalette.PlayerColors.Count);
 			}

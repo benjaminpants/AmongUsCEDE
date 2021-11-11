@@ -18,6 +18,7 @@ using AmongUsCEDE.Core;
 
 namespace AmongUsCEDE.Colors
 {
+	#if false
 	[HarmonyPatch(typeof(PlayerTab))]
 	[HarmonyPatch("OnEnable")]
 	class ColorMenuPatch
@@ -229,4 +230,5 @@ namespace AmongUsCEDE.Colors
 			return false;
 		}
 	}
+	#endif
 }

@@ -116,23 +116,6 @@ namespace AmongUsCEDE.UI.Patches
 		}
 
 
-		[HarmonyPatch(typeof(CustomPlayerMenu))]
-		[HarmonyPatch("Start")]
-		class NoShowForNonHost //TODO: actually fix GameOptionsMenuPatch instead of this stupid work around
-		{
-			static void Prefix(CustomPlayerMenu __instance)
-			{
-				if (AmongUsClient.Instance)
-				{
-					if (AmongUsClient.Instance.AmHost) return;
-					GameObject DESTROY = GameObject.Find("GameTab");
-					if (DESTROY == null) return;
-					GameObject.Destroy(DESTROY);
-				}
-			}
-		}
-
-
 		[HarmonyPatch(typeof(GameOptionsMenu))]
 		[HarmonyPatch("Update")]
 		class GameOptionsMenuUpdatePatch

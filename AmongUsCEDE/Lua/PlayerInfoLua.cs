@@ -35,19 +35,19 @@ namespace AmongUsCEDE.LuaData
 			set;
 		}
 
-		public uint Hat
+		public string Hat
 		{
 			get;
 			set;
 		}
 
-		public uint Skin
+		public string Skin
 		{
 			get;
 			set;
 		}
 
-		public uint Pet
+		public string Pet
 		{
 			get;
 			set;
@@ -141,10 +141,10 @@ namespace AmongUsCEDE.LuaData
 			{
 				ID = plf.PlayerId;
 				Name = plf.PlayerName;
-				Color = plf.ColorId;
-				Hat = plf.HatId;
-				Skin = plf.SkinId;
-				Pet = plf.PetId;
+				Color = plf.Object.CurrentOutfit.ColorId;
+				Hat = plf.Object.CurrentOutfit.HatId;
+				Skin = plf.Object.CurrentOutfit.SkinId;
+				Pet = plf.Object.CurrentOutfit.PetId;
 				Role = plf.GetRole().Internal_Name;
 				Layer = plf.GetRole().Layer;
 				Team = plf.GetRole().Team;

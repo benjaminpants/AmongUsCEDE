@@ -8,7 +8,7 @@ namespace AmongUsCEDE.Core
 	{
 		private void DisconnectClient()
 		{
-			AmongUsClient.Instance.EnqueueDisconnect(InnerNet.DisconnectReasons.Custom, "Critical Error(" + this.Source + "):" + this.Message);
+			AmongUsClient.Instance.EnqueueDisconnect(DisconnectReasons.Custom, "Critical Error(" + this.Source + "):" + this.Message);
 		}
 
 		public CriticalClientException() : base("A Critical Error has occured!")

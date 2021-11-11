@@ -33,6 +33,7 @@ namespace AmongUsCEDE.Core
 		public CustomRoleClass(byte ID)
 		{
 			Role = (RoleTypes)999;
+			this.TeamType = RoleTeamTypes.Crewmate;
 			RoleID = ID;
 		}
 
@@ -46,7 +47,7 @@ namespace AmongUsCEDE.Core
 				return;
 			}
 			Role role = ScriptManager.CurrentGamemode.Roles[RoleID - 1];
-			CanUseKillButton = role.CanDo(RoleSpecials.Primary, player.Data);
+			CanUseKillButton = role.CanDo(RoleSpecials.Primary, null);
 			if (CanUseKillButton)
 			{
 				DestroyableSingleton<HudManager>.Instance.KillButton.Show();
@@ -56,7 +57,7 @@ namespace AmongUsCEDE.Core
 			{
 				DestroyableSingleton<HudManager>.Instance.KillButton.Hide();
 			}
-			if (role.CanDo(RoleSpecials.Vent,null)) //make it grab the raw value
+			if (role.CanDo(RoleSpecials.Vent, null)) //make it grab the raw value
 			{
 				DestroyableSingleton<HudManager>.Instance.ImpostorVentButton.Show();
 			}
@@ -64,7 +65,22 @@ namespace AmongUsCEDE.Core
 			{
 				DestroyableSingleton<HudManager>.Instance.ImpostorVentButton.Hide();
 			}
-			player.nameText.color = this.NameColor;
+			if (role.CanDo(RoleSpecials.Sabotage, null)) //make it grab the raw value
+			{
+				DestroyableSingleton<HudManager>.Instance.SabotageButton.Show();
+			}
+			else
+			{
+				DestroyableSingleton<HudManager>.Instance.SabotageButton.Hide();
+			}
+			if (role.CanBeSeen(Player.Data, PlayerControl.LocalPlayer.Data))
+			{
+				player.nameText.color = role.RoleTextColor;
+			}
+			else
+			{
+				player.nameText.color = Palette.White;
+			}
 			this.InitializeAbilityButton();
 		}
 
@@ -76,6 +92,5 @@ namespace AmongUsCEDE.Core
 
 	internal class RolePatches
 	{
-
 	}
 }

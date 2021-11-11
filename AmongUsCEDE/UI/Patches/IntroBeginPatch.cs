@@ -11,8 +11,22 @@ class IntroBeginPatch
 	{
 		Role role = PlayerControl.LocalPlayer.Data.GetRole();
 		__instance.BackgroundBar.material.SetColor("_Color", role.RoleColor);
-		__instance.Title.color = role.RoleColor;
-		__instance.Title.text = role.Name;
+		__instance.TeamTitle.color = role.RoleColor;
+		__instance.TeamTitle.text = role.Name;
 		__instance.ImpostorText.text = role.Reveal_Text;
+	}
+}
+
+[HarmonyPatch(typeof(IntroCutscene))]
+[HarmonyPatch("SetUpRoleText")]
+class SetUpRoleTextPatch
+{
+	private static void Postfix(IntroCutscene __instance)
+	{
+		__instance.RoleText.text = "No Modifier";
+		__instance.RoleBlurbText.text = "This screen is really stupid";
+		__instance.RoleText.color = Palette.White;
+		__instance.YouAreText.color = Palette.White;
+		__instance.RoleBlurbText.color = Palette.White;
 	}
 }

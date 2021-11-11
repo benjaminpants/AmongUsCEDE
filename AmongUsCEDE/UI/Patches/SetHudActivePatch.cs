@@ -16,6 +16,7 @@ internal class SetHudActivePatch
 		Role role = playerInfo.GetRole();
 		__instance.ReportButton.gameObject.SetActive(isActive && role.CanDo(RoleSpecials.Report,playerInfo));
 		__instance.KillButton.gameObject.SetActive(isActive && role.CanDo(RoleSpecials.Primary,playerInfo) && !playerInfo.IsDead);
+		__instance.ImpostorVentButton.gameObject.SetActive(isActive && role.CanDo(RoleSpecials.Vent,null));
 		__instance.TaskText.transform.parent.gameObject.SetActive(isActive);
 		__instance.roomTracker.gameObject.SetActive(isActive);
 		return false;
