@@ -9,8 +9,8 @@ using Il2CppSystem.Collections.Generic;
 using MoonSharp.Interpreter;
 
 [HarmonyPatch(typeof(ShipStatus))]
-[HarmonyPatch("SelectInfected")]
-internal class ImpostorSelectPatch
+[HarmonyPatch("SelectRoles")]
+internal class RoleSelectPatch
 {
 	private static bool Prefix()
 	{
@@ -25,6 +25,7 @@ internal class ImpostorSelectPatch
 			select pcd into pc
 			where !pc.IsDead
 			select pc).ToList();
+		//TODO: MARKED FOR DELUAFICATION
 		DynValue dyn = ScriptManager.RunCurrentGMFunction("SelectRoles", false, new object[1]
 		{
 			list.ToArray()
